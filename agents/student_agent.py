@@ -16,7 +16,7 @@ class StudentAgent(Agent):
 
   def __init__(self):
     super(StudentAgent, self).__init__()
-    self.name = "StudentAgent"
+    self.name = "StudentAgent"cp agents/student_agent.py agents/second_agent.py
 
   def step(self, chess_board, player, opponent):
     """
@@ -34,6 +34,34 @@ class StudentAgent(Agent):
 
     Please check the sample implementation in agents/random_agent.py or agents/human_agent.py for more details.
     """
+    valid_moves = get_valid_moves(chess_board, player)
+    if len(valid_moves) == 0:
+        # If no valid moves are available, return None
+        print(f"No valid moves left for player {player}.")
+        return None
+    maxscore = 0
+    bestmove = None
+
+    for i in range(5):
+        simb = copy.deepcopy(chess_board)
+        is_endgame = False;
+        move = random_move(simb, player)
+        score = 0
+        execute_move(move)
+        is_endgame,p1,p2 = check_endgame(simb, player, opponent)
+
+        while(not is_endgame):
+            execute_move(random_move(simb, player))
+            is_endgame,p1,p2 = check_endgame(simb, player, opponent)
+
+        if(player == 1):#we are player 1
+            score = p1
+        else:#we are player 2
+            score = p2
+
+        if (score > maxscore):
+            maxscore = score
+            bestmove = move
 
     # Some simple code to help you with timing. Consider checking 
     # time_taken during your search and breaking with the best answer
@@ -45,5 +73,5 @@ class StudentAgent(Agent):
 
     # Dummy return (you should replace this with your actual logic)
     # Returning a random valid move as an example
-    return random_move(chess_board,player)
+    return bestmove
 
