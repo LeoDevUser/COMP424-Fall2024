@@ -16,7 +16,7 @@ class StudentAgent(Agent):
 
   def __init__(self):
     super(StudentAgent, self).__init__()
-    self.name = "StudentAgent"cp agents/student_agent.py agents/second_agent.py
+    self.name = "StudentAgent"
 
   def step(self, chess_board, player, opponent):
     """
