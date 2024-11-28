@@ -48,14 +48,9 @@ class StudentAgent(Agent):
         is_endgame = False
         move = valid_moves[i]
         score = 0
-        if (move != None):
-            execute_move(simb,move,player)
-        else:
-            return None
+        execute_move(simb,move,player)
 
         is_endgame,p1,p2 = check_endgame(simb, player, opponent)
-        if (is_endgame):
-          print("ENDGAME POSITION")
 
         while(not is_endgame):
             tmp = random_move(simb, player)
