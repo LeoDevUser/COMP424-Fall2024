@@ -20,7 +20,6 @@ class StudentAgent(Agent):
 
   def step(self, chess_board, player, opponent):
     """
-    AGustinoansofinWQP
     Implement the step function of your agent here.
     You can use the following variables to access the chess board:
     - chess_board: a numpy array of shape (board_size, board_size)
@@ -43,11 +42,11 @@ class StudentAgent(Agent):
     maxscore = 0
     bestmove = None
 
-    for i in range(20):
+    
+    for i in range(len(valid_moves)):
         simb = deepcopy(chess_board)
-        is_endgame = False;
-        move = random_move(simb, player)
-        #print("NO MOVES AFTER 1ST RANDMOVE")
+        is_endgame = False
+        move = valid_moves[i]
         score = 0
         if (move != None):
             execute_move(simb,move,player)
