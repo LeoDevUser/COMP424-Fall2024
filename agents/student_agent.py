@@ -43,22 +43,23 @@ class StudentAgent(Agent):
     bestmove = None
 
     
-    for i in range(len(valid_moves)):
-        simb = deepcopy(chess_board)
+    for move in valid_moves:
+        simb = deepcopy(chess_board)#simulated board
         is_endgame = False
-        move = valid_moves[i]
         score = 0
         execute_move(simb,move,player)
-
         is_endgame,p1,p2 = check_endgame(simb, player, opponent)
+        simplayer = player
 
         while(not is_endgame):
-            tmp = random_move(simb, player)
+            tmp = random_move(simb, simplayer)
             if (tmp != None):
-                execute_move(simb,tmp,player)
+                execute_move(simb,tmp,simplayer)
                 is_endgame,p1,p2 = check_endgame(simb, player, opponent)
+            if (simplayer == player):
+                simplayer = (3 - player)
             else:
-                break
+                simplayer = player
 
         if(player == 1):#we are player 1
             score = p1
