@@ -55,8 +55,13 @@ class StudentAgent(Agent):
         is_endgame,p1,p2 = check_endgame(simb, player, opponent)
 
         while(not is_endgame):
-            execute_move(simb,random_move(simb, player),player)
-            is_endgame,p1,p2 = check_endgame(simb, player, opponent)
+            tmp = random_move(simb, player)
+            if (tmp != None):
+                execute_move(simb,move,player)
+            else:
+                break
+                execute_move(simb,tmp,player)
+                is_endgame,p1,p2 = check_endgame(simb, player, opponent)
 
         if(player == 1):#we are player 1
             score = p1
