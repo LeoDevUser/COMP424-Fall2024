@@ -37,7 +37,7 @@ class StudentAgent(Agent):
     valid_moves = get_valid_moves(chess_board, player)
     if len(valid_moves) == 0:
         # If no valid moves are available, return None
-        print(f"No valid OUR CODE OUR CODE moves left for player {player}.")
+        #print(f"No valid OUR CODE OUR CODE moves left for player {player}.")
         return None
     maxscore = 0
     bestmove = None
@@ -46,7 +46,7 @@ class StudentAgent(Agent):
         simb = deepcopy(chess_board)
         is_endgame = False;
         move = random_move(simb, player)
-        print("NO MOVES AFTER 1ST RANDMOVE")
+        #print("NO MOVES AFTER 1ST RANDMOVE")
         score = 0
         if (move != None):
             execute_move(simb,move,player)
@@ -54,6 +54,8 @@ class StudentAgent(Agent):
             return None
 
         is_endgame,p1,p2 = check_endgame(simb, player, opponent)
+        if (is_endgame):
+          print("ENDGAME POSITION")
 
         while(not is_endgame):
             tmp = random_move(simb, player)
