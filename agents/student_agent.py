@@ -34,10 +34,9 @@ class StudentAgent(Agent):
 
     Please check the sample implementation in agents/random_agent.py or agents/human_agent.py for more details.
     """
+    start_time = time.time()
     valid_moves = get_valid_moves(chess_board, player)
     if len(valid_moves) == 0:
-        # If no valid moves are available, return None
-        #print(f"No valid OUR CODE OUR CODE moves left for player {player}.")
         return None
     maxscore = 0
     bestmove = None
@@ -73,12 +72,8 @@ class StudentAgent(Agent):
     # Some simple code to help you with timing. Consider checking 
     # time_taken during your search and breaking with the best answer
     # so far when it nears 2 seconds.
-    start_time = time.time()
     time_taken = time.time() - start_time
 
     print("My AI's turn took ", time_taken, "seconds.")
-
-    # Dummy return (you should replace this with your actual logic)
-    # Returning a random valid move as an example
     return bestmove
 

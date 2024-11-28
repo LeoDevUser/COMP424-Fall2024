@@ -178,7 +178,7 @@ def random_move(chess_board, player):
 
     if len(valid_moves) == 0:
         # If no valid moves are available, return None
-        print(f"No valid moves left for player {player}.")
+        #print(f"No valid moves left for player {player}.")
         return None
     
     return valid_moves[np.random.randint(len(valid_moves))]
