@@ -20,6 +20,7 @@ class StudentAgent(Agent):
 
   def step(self, chess_board, player, opponent):
     """
+    AGustinoansofinWQP
     Implement the step function of your agent here.
     You can use the following variables to access the chess board:
     - chess_board: a numpy array of shape (board_size, board_size)
