@@ -42,7 +42,7 @@ class StudentAgent(Agent):
     maxscore = 0
     bestmove = None
 
-    for i in range(5):
+    for i in range(20):
         simb = deepcopy(chess_board)
         is_endgame = False;
         move = random_move(simb, player)
