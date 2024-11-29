@@ -14,7 +14,7 @@ class Alpha2Agent(Agent):
         self.name = "Alpha2Agent"
 
     @staticmethod
-    def eval(board, player, opponent):
+    def evalfn(board, player, opponent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         return p0_score - p1_score
 
@@ -23,7 +23,7 @@ class Alpha2Agent(Agent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         
         if (depth == 0 or is_endgame):
-            return eval(board, player, opponent)
+            return Alpha2Agent.evalfn(board, player, opponent)
 
 
         if maximizing:
