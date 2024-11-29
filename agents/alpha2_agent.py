@@ -23,7 +23,7 @@ class Alpha2Agent(Agent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         
         if (depth == 0 or is_endgame):
-            return Alpha2Agent.evalfn(board, player, opponent)
+            return p0_score - p1_score
 
 
         if maximizing:
