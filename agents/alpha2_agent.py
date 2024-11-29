@@ -101,9 +101,9 @@ class Alpha2Agent(Agent):
             if score > best_score:
                 best_score = score
                 best_move = move
-            #alpha = max(alpha, best_score)
-            #if beta <= alpha:
-                #break
+            alpha = max(alpha, best_score)
+            if beta <= alpha:
+                break
         time_taken = time.time() - start_time
 
         print("My AI's turn took ", time_taken, "seconds.")
