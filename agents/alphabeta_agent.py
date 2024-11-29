@@ -49,7 +49,7 @@ class AlphabetaAgent(Agent):
                 return AlphabetaAgent.utility(board, current_player,other_player)
             else:
                 opponent_valid_moves = get_valid_moves(board, other_player)
-                if not opponent_valid_moves
+                if not opponent_valid_moves:
                     return AlphabetaAgent.utility(board, current_player, other_player)
                 else:
                     return Alpha.betaAgent.minimax(board, depth - 1, alpha, beta, not maximizing_player, other_player, current_player)
