@@ -48,7 +48,14 @@ class AlphabetaAgent(Agent):
             if is_terminal:
                 return AlphabetaAgent.utility(board, current_player,other_player)
             else:
-                return AlphabetaAgent.minimax(board, depth, alpha, beta, not maximizing_player, other_player, current_player)
+                opponent_valid_moves = get_valid_moves(board, other_player)
+                if not opponent_valid_moves
+                    return AlphabetaAgent.utility(board, current_player, other_player)
+                else:
+                    return Alpha.betaAgent.minimax(board, depth - 1, alpha, beta, not maximizing_player, other_player, current_player)
+
+                
+
 
         if maximizing_player:
             print("entered max player loop")
@@ -79,7 +86,7 @@ class AlphabetaAgent(Agent):
 
     def step(self, chess_board, player, opponent):
         start_time = time.time()
-        depth = 100000000
+        depth = 10000
         valid_moves = get_valid_moves(chess_board, player)
 
         if not valid_moves:
