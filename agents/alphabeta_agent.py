@@ -52,7 +52,7 @@ class AlphabetaAgent(Agent):
                 if not opponent_valid_moves:
                     return AlphabetaAgent.utility(board, current_player, other_player)
                 else:
-                    return Alpha.betaAgent.minimax(board, depth - 1, alpha, beta, not maximizing_player, other_player, current_player)
+                    return AlphabetaAgent.minimax(board, depth - 1, alpha, beta, not maximizing_player, other_player, current_player)
 
                 
 
