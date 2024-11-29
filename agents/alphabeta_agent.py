@@ -20,37 +20,37 @@ class AlphabetaAgent(Agent):
         #    return None
         if player == 1:
             if p1_score > p2_score:
-                return 1
+                return p1_score - p2_score
             elif p1_score < p2_score:
-                return -1
+                return p1_score - p2_score
             else:
                 return 0
         else:
             if p2_score > p1_score:
-                return 1
+                return p2_score - p1_score
             elif p2_score < p1_score:
-                return -1
+                return p2_score - p1_score
             else:
                 return 0
 
     @staticmethod    
     def minimax(board, depth, alpha, beta, maximizing_player, current_player, other_player):
         util = AlphabetaAgent.utility(board,current_player,other_player)
-        if util is not None:
-            return util
+        #if util is not None:
+            #return util
         if depth == 0:
-            return 0
+            return util
 
         valid_moves = get_valid_moves(board,current_player)
 
         if not valid_moves:
             is_terminal, _, _ = check_endgame(board, current_player, other_player)
             if is_terminal:
-                return AlphabetaAgent.utility(board, current_player,other_player)
+                return AlphabetaAgent.utility(board, current_player,other_player)  #Could improve to simply return prev. calculated "util"
             else:
                 opponent_valid_moves = get_valid_moves(board, other_player)
                 if not opponent_valid_moves:
-                    return AlphabetaAgent.utility(board, current_player, other_player)
+                    return AlphabetaAgent.utility(board, current_player, other_player)  #same as above
                 else:
                     return AlphabetaAgent.minimax(board, depth - 1, alpha, beta, not maximizing_player, other_player, current_player)
 
