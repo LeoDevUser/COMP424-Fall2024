@@ -14,10 +14,50 @@ class Alpha2Agent(Agent):
         self.name = "Alpha2Agent"
 
 
-    def minimax(board, depth, alpha, beta, maximizing):
-        check_endgame
+    def eval(board, player, opponent):
+        is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
+        return p0_score - p1_score
+
+
+    def minimax(board, depth, alpha, beta, maximizing, player, opponent):
+        is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         
-        if depth == 0
+        if (depth == 0 or is_endgame):
+            return eval(board, player, opponent)
+
+
+        if maximizing:
+            max_eval = -inf
+            moves = get_valid_moves(board, player)
+            for move in moves:
+                board_copy = deepcopy(board)
+                execute_move(board_copy, move, player)
+                eval = minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
+                max_eval = max(max_eval, eval)
+                alpha = max(alpha, eval)
+                if (beta <= alpha):
+                    break
+
+            return max_eval
+
+
+        else:
+            min_eval = +inf
+            moves = get_valid_moves(board, opponent)
+            for move in moves:
+                board_copy = deepcopy(board)
+                execute_move(board_copy, move, opponent)
+                eval = minimax(board_copy, depth - 1, alpha, beta, True, player, opponent)
+                min_eval = min(min_eval, eval)
+                beta = min(beta, eval)
+                if (beta <= alpha):
+                    break
+
+            return min_eval
+                    
+                
+            
+            
 
 
 
@@ -53,9 +93,9 @@ class Alpha2Agent(Agent):
             if score > best_score:
                 best_score = score
                 best_move = move
-            alpha = max(alpha, best_score)
-            if beta <= alpha:
-                break
+            #alpha = max(alpha, best_score)
+            #if beta <= alpha:
+                #break
         time_taken = time.time() - start_time
 
         print("My AI's turn took ", time_taken, "seconds.")
