@@ -16,8 +16,8 @@ class AlphabetaAgent(Agent):
     @staticmethod    
     def utility(board, player, opponent):
         is_endgame, p1_score, p2_score = check_endgame(board, player, opponent)
-        if not is_endgame:
-            return None
+        #if not is_endgame:
+        #    return None
         if player == 1:
             if p1_score > p2_score:
                 return 1
@@ -82,7 +82,7 @@ class AlphabetaAgent(Agent):
 
     def step(self, chess_board, player, opponent):
         start_time = time.time()
-        depth = 6
+        depth = 10
         valid_moves = get_valid_moves(chess_board, player)
 
         if not valid_moves:
