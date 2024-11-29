@@ -32,9 +32,9 @@ class Alpha2Agent(Agent):
             for move in moves:
                 board_copy = deepcopy(board)
                 execute_move(board_copy, move, player)
-                eval = Alpha2Agent.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
-                max_eval = max(max_eval, eval)
-                alpha = max(alpha, eval)
+                score_ = Alpha2Agent.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
+                max_eval = max(max_eval, score_)
+                alpha = max(alpha, score_)
                 if (beta <= alpha):
                     break
 
@@ -47,9 +47,9 @@ class Alpha2Agent(Agent):
             for move in moves:
                 board_copy = deepcopy(board)
                 execute_move(board_copy, move, opponent)
-                eval = Alpha2Agent.minimax(board_copy, depth - 1, alpha, beta, True, player, opponent)
-                min_eval = min(min_eval, eval)
-                beta = min(beta, eval)
+                score_ = Alpha2Agent.minimax(board_copy, depth - 1, alpha, beta, True, player, opponent)
+                min_eval = min(min_eval, score_)
+                beta = min(beta, score_)
                 if (beta <= alpha):
                     break
 
