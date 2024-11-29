@@ -52,7 +52,7 @@ class AlphabetaAgent(Agent):
                 if not opponent_valid_moves:
                     return AlphabetaAgent.utility(board, current_player, other_player)  #same as above
                 else:
-                    return AlphabetaAgent.minimax(board, depth - 1, alpha, beta, not maximizing_player, other_player, current_player)
+                    return AlphabetaAgent.minimax(board, depth - 1, alpha, beta, not maximizing_player, current_player, other_player)
 
                 
 
@@ -62,7 +62,7 @@ class AlphabetaAgent(Agent):
             for move in valid_moves:
                 new_board = deepcopy(board)
                 execute_move(new_board, move, current_player)
-                eval = AlphabetaAgent.minimax(new_board, depth - 1, alpha, beta, False, other_player, current_player)
+                eval = AlphabetaAgent.minimax(new_board, depth - 1, alpha, beta, False, current_player, other_player)
                 max_eval = max(max_eval, eval)
                 alpha = max(alpha, eval)
                 if beta <= alpha:
@@ -73,7 +73,7 @@ class AlphabetaAgent(Agent):
             for move in valid_moves:
                 new_board = deepcopy(board)
                 execute_move(new_board, move, current_player)
-                eval = AlphabetaAgent.minimax(new_board, depth - 1, alpha, beta, True, other_player, current_player)
+                eval = AlphabetaAgent.minimax(new_board, depth - 1, alpha, beta, True, current_player, other_player)
                 min_eval = min(min_eval, eval)
                 beta = min(beta, eval)
                 if beta <= alpha:
