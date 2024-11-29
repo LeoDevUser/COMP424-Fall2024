@@ -51,6 +51,7 @@ class AlphabetaAgent(Agent):
                 return AlphabetaAgent.minimax(board, depth, alpha, beta, not maximizing_player, other_player, current_player)
 
         if maximizing_player:
+            print("entered max player loop")
             max_eval = -float('inf')
             for move in valid_moves:
                 new_board = deepcopy(board)
@@ -59,17 +60,20 @@ class AlphabetaAgent(Agent):
                 max_eval = max(max_eval, eval)
                 alpha = max(alpha, eval)
                 if beta <= alpha:
+                    print("exit max player loop")
                     break
             return max_eval
         else:
             min_eval = float('inf')
             for move in valid_moves:
+                print("enter min player loop")
                 new_board = deepcopy(board)
                 execute_move(new_board, move, current_player)
                 eval = AlphabetaAgent.minimax(new_board, depth - 1, alpha, beta, True, other_player, current_player)
                 min_eval = min(min_eval, eval)
                 beta = min(beta, eval)
                 if beta <= alpha:
+                    print("exit min player loop")
                     break
             return min_eval
 
@@ -88,6 +92,7 @@ class AlphabetaAgent(Agent):
 
 
         for move in valid_moves:
+            print("entered for loop in step")
             new_board = deepcopy(chess_board)
             execute_move(new_board, move, player)
             score = AlphabetaAgent.minimax(new_board, depth - 1, alpha, beta, False, player, opponent)
@@ -96,6 +101,7 @@ class AlphabetaAgent(Agent):
                 best_move = move
             alpha = max(alpha, best_score)
             if beta <= alpha:
+                print("exit for loop in step")
                 break
         time_taken = time.time() - start_time
 
