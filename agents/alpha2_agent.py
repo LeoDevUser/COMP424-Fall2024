@@ -27,7 +27,7 @@ class Alpha2Agent(Agent):
 
 
         if maximizing:
-            max_eval = -inf
+            max_eval = -float('inf')
             moves = get_valid_moves(board, player)
             for move in moves:
                 board_copy = deepcopy(board)
@@ -42,7 +42,7 @@ class Alpha2Agent(Agent):
 
 
         else:
-            min_eval = +inf
+            min_eval = float('inf')
             moves = get_valid_moves(board, opponent)
             for move in moves:
                 board_copy = deepcopy(board)
