@@ -27,8 +27,12 @@ class Alpha2Agent(Agent):
 
 
         if maximizing:
-            max_eval = -float('inf')
             moves = get_valid_moves(board, player)
+            if not moves:
+            # Player has no valid moves; pass the turn to the opponent
+                return Alpha2Agent.minimax(board, depth, alpha, beta, False, player, opponent)
+            max_eval = -float('inf')
+            
             for move in moves:
                 board_copy = deepcopy(board)
                 execute_move(board_copy, move, player)
@@ -42,8 +46,12 @@ class Alpha2Agent(Agent):
 
 
         else:
-            min_eval = float('inf')
             moves = get_valid_moves(board, opponent)
+            if not moves:
+            # Opponent has no valid moves; pass the turn back to the player
+                return Alpha2Agent.minimax(board, depth, alpha, beta, True, player, opponent)
+            min_eval = float('inf')
+            
             for move in moves:
                 board_copy = deepcopy(board)
                 execute_move(board_copy, move, opponent)
