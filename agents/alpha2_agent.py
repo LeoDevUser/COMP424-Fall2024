@@ -16,7 +16,7 @@ class Alpha2Agent(Agent):
     @staticmethod
     def evalfn(board, player, opponent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
-        return p0_score - p1_score
+        return (p0_score - p1_score)
 
     @staticmethod
     def minimax(board, depth, alpha, beta, maximizing, player, opponent):
