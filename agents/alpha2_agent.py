@@ -13,12 +13,12 @@ class Alpha2Agent(Agent):
         super(Alpha2Agent, self).__init__()
         self.name = "Alpha2Agent"
 
-
+    @staticmethod
     def eval(board, player, opponent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         return p0_score - p1_score
 
-
+    @staticmethod
     def minimax(board, depth, alpha, beta, maximizing, player, opponent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         
