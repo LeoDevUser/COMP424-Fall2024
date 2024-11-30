@@ -23,7 +23,7 @@ class Alpha2Agent(Agent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         if is_endgame:
             return Alpha2Agent.evalfn(board, player, opponent)
-        if Maxplayer:
+        if maximizing:
             move = random_move(board, opponent)
             board_copy = deepcopy(board)
             execute_move(board_copy, move, opponent)
