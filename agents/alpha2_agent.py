@@ -157,8 +157,8 @@ class Alpha2Agent(Agent):
 
 
 
-    @staticmethod
-    def minimax(board, depth, alpha, beta, maximizing, player, opponent):
+    
+    def minimax(self, board, depth, alpha, beta, maximizing, player, opponent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)    
         if   is_endgame or depth == 0:
             return p0_score - p1_score
