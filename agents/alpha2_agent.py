@@ -183,7 +183,7 @@ class Alpha2Agent(Agent):
                 else:
                     key = find_top_n
 
-                moves = Alpha2Agent.promising_moves(self,valid_moves, chess_board, player, opponent, key)
+                moves = Alpha2Agent.promising_moves(self, moves, chess_board, player, opponent, key)
             
             if moves == None:
             # Player has no valid moves; pass the turn to the opponent
@@ -218,7 +218,7 @@ class Alpha2Agent(Agent):
                 else:
                     key = find_top_n
         
-                moves = Alpha2Agent.promising_moves(self,valid_moves, board, player, opponent, key)
+                moves = Alpha2Agent.promising_moves(self, moves, board, player, opponent, key)
 
 
 
