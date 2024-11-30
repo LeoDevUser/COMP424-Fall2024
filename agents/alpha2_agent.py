@@ -32,6 +32,9 @@ class Alpha2Agent(Agent):
             # Player has no valid moves; pass the turn to the opponent
                 return Alpha2Agent.minimax(board, depth, alpha, beta, False, player, opponent)
             max_eval = -float('inf')
+
+            for move in moves:
+                
             
             for move in moves:
                 board_copy = deepcopy(board)
@@ -82,7 +85,7 @@ class Alpha2Agent(Agent):
 
     def step(self, chess_board, player, opponent):
         start_time = time.time()
-        depth = 6
+        depth = 5
         valid_moves = get_valid_moves(chess_board, player)
 
         if not valid_moves:
