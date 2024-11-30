@@ -18,6 +18,31 @@ class Alpha2Agent(Agent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         return (p0_score - p1_score)
 
+
+    def mc_eval(board, Maxplayer, player, opponent):
+        is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
+        if is_endgame:
+            return evalfn
+        if Maxplayer:
+            move = random_move(board, opponent)
+            board_copy = deepcopy(board)
+            execute_move(board_copy, move, opponent)
+            return mc_eval(board_copy, not Maxplayer, player, opponent)
+        else:
+            move = random_move(board, player)
+            board_copy = deepcopy(board)
+            execute_move(board_copy, move, player)
+            return mc_eval(board_copy, not Maxplayer, player, opponent)
+
+    def montecarlo(board, Maxplayer, player, opponent, n_simulations):
+        score_sum = 0
+        for i in range(n_simulations)
+            score_sum += mc_eval(board, opponent, Maxplayer, player, opponent)
+
+        return (score_sum/ n_simulations)
+
+
+
     @staticmethod
     def minimax(board, depth, alpha, beta, maximizing, player, opponent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
