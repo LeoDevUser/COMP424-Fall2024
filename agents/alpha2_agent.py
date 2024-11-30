@@ -285,3 +285,23 @@ class Alpha2Agent(Agent):
 
         print("My AI's turn took ", time_taken, "seconds.")
         return best_move
+
+
+
+
+
+def find_top_n(nums, n):
+    #Finds the n highest values in a list.
+    #Create a heap of size n, with the smallest element at the top
+    heap = []
+    for tup in nums:
+        heapq.heappush(heap, tup)
+    return [tup[0] for tup in heapq.nlargest(n,heap, lambda x: x[1])]
+
+def find_low_n(nums, n):
+    #Finds the n highest values in a list.
+    #Create a heap of size n, with the smallest element at the top
+    heap = []
+    for tup in nums:
+        heapq.heappush(heap, tup)
+    return [tup[0] for tup in heapq.nsmallest(n,heap, lambda x: x[1])]
