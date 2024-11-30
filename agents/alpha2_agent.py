@@ -22,23 +22,49 @@ class Alpha2Agent(Agent):
     def mc_eval(board, maximizing, player, opponent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         if is_endgame:
-            return evalfn(board, player, opponent)
-        if Maxplayer:
-            move = random_move(board, opponent)
-            board_copy = deepcopy(board)
-            execute_move(board_copy, move, opponent)
-            return mc_eval(board_copy, not maximizing, player, opponent)
-        else:
+            return Alpha2Agent.evalfn(board, player, opponent)
+        
+        if maximizing:
             move = random_move(board, player)
+            if move == None: #if no avail moves for player
+                is_endgame, _, _ = check_endgame(board, player, opponent) #check if game over
+                if is_endgame:
+                    return Alpha2Agent.evalfn(board, player, opponent)
+                else:
+                    move = random_move(board, opponent) #if not game over, generate play for opponent
+                    if move == None:
+                        return Alpha2Agent.evalfn(board, player, opponent) #if opponent also has no avail moves
+                    board_copy = deepcopy(board)
+                    execute_move(board_copy, move, opponent) 
+                    return Alpha2Agent.mc_eval(board_copy, maximizing, player, opponent)
+            
             board_copy = deepcopy(board)
             execute_move(board_copy, move, player)
-            return mc_eval(board_copy, not maximizing, player, opponent)
+            return Alpha2Agent.mc_eval(board_copy, not maximizing, player, opponent)
+     
+        else:
+            move = random_move(board, opponent)
+            if move == None: #if no avail moves for opponent
+                is_endgame, _, _ = check_endgame(board, player, opponent) #check if game over
+                if is_endgame:
+                    return Alpha2Agent.evalfn(board, player, opponent)
+                else:
+                    move = random_move(board, player) #if not game over, generate play for player
+                    if move == None:
+                        return Alpha2Agent.evalfn(board, player, player) #if player also has no avail moves
+                    board_copy = deepcopy(board)
+                    execute_move(board_copy, move, player) 
+                    return Alpha2Agent.mc_eval(board_copy, maximizing, player, opponent)
+                        
+            board_copy = deepcopy(board)
+            execute_move(board_copy, move, opponent)
+            return Alpha2Agent.mc_eval(board_copy, not maximizing, player, opponent)
 
     @staticmethod
     def montecarlo(board, maximizing, player, opponent, n_simulations):
         score_sum = 0
         for i in range(n_simulations):
-            score_sum += mc_eval(board, opponent, maximizing, player, opponent)
+            score_sum += Alpha2Agent.mc_eval(board, maximizing, player, opponent)
 
         return (score_sum/ n_simulations)
 
@@ -47,13 +73,13 @@ class Alpha2Agent(Agent):
     @staticmethod
     def minimax(board, depth, alpha, beta, maximizing, player, opponent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)    
-        if   is_endgame:
+        if   is_endgame or depth == 0:
             return p0_score - p1_score
 
         
-        if (depth == 0):
-            n = 5
-            return montecarlo(board, maximizing, player, opponent, n)
+        #if (depth == 0):
+            #n = 3
+            #return Alpha2Agent.montecarlo(board, maximizing, player, opponent, n)
             
 
 
@@ -116,7 +142,7 @@ class Alpha2Agent(Agent):
 
     def step(self, chess_board, player, opponent):
         start_time = time.time()
-        depth = 4
+        depth = 3
         valid_moves = get_valid_moves(chess_board, player)
 
         if not valid_moves:
