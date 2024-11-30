@@ -17,6 +17,7 @@ class SecondAgent(Agent):
         self.boardfill = 0
         self.boardsize = -1
         self.avoid = [] #tells us which squares to avoid
+        self.prefer = [] #tells us which squares to prioritize
 
     def updatefill(self, board, player):
         if self.boardsize == -1:
@@ -29,16 +30,48 @@ class SecondAgent(Agent):
         return count / self.boardsize
 
 
-    @staticmethod
-    def promising_moves(valid_moves, board, player, opp, key):
+    def initavoid(self, board):
+        for i in range(len(board)):
+            self.avoid.append((1,i))
+            self.avoid.append((len(board)-2,i))
+            self.avoid.append((i,1))
+            self.avoid.append((i,len(board)-2))
+
+    def initprefer(self, board):
+        #add corners
+        size = len(board) - 1
+        self.prefer.append((0,0))
+        self.prefer.append((size,0))
+        self.prefer.append((0,size))
+        self.prefer.append((size,size))
+        
+    def promising_moves(self,valid_moves, board, player, opp, key):
         #returns up to 5 of the best moves
-        #currently based on the utility of such moves
+        #based on the utility of moves and position
         scores = []
         #compute the scores
+        if len(self.avoid) == 0:
+            self.initavoid(board)
+        if len(self.prefer) == 0:
+            self.initprefer(board)
         for move in valid_moves:
             simb = deepcopy(board)
             execute_move(simb,move,player)
             _,p1,p2 = check_endgame(simb, player, opp)
+            if move in self.avoid:
+                if key == find_low_n:
+                    p1 += 3
+                    p2 += 3
+                else:
+                    p1 -= 3
+                    p2 -= 3
+            if move in self.prefer:
+                if key == find_low_n:
+                    p1 -= 10
+                    p2 -= 10
+                else:
+                    p1 += 10
+                    p2 += 10
             if player == 1:
                 scores.append((move,p1))
             else:
@@ -60,7 +93,7 @@ class SecondAgent(Agent):
         else:
             key = find_top_n
 
-        valid_moves = SecondAgent.promising_moves(valid_moves, chess_board, player, opponent, key)
+        valid_moves = SecondAgent.promising_moves(self,valid_moves, chess_board, player, opponent, key)
         for move in valid_moves:
             simb = deepcopy(chess_board)#simulated board
             is_endgame = False
