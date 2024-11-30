@@ -52,7 +52,8 @@ class Alpha2Agent(Agent):
 
         
         if (depth == 0):
-            return montecarlo(board, maximizing, player, opponent)
+            n = 5
+            return montecarlo(board, maximizing, player, opponent, n)
             
 
 
