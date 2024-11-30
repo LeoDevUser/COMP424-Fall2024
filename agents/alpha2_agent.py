@@ -84,7 +84,7 @@ class Alpha2Agent(Agent):
                 scores.append((move,p1))
             else:
                 scores.append((move,p2))
-        return key(scores, 10)
+        return key(scores, 5)
 
 
 
