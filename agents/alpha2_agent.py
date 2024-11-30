@@ -33,7 +33,7 @@ class Alpha2Agent(Agent):
                 return Alpha2Agent.minimax(board, depth, alpha, beta, False, player, opponent)
             max_eval = -float('inf')
 
-            for move in moves:
+            #for move in moves:
                 
             
             for move in moves:
