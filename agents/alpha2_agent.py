@@ -23,15 +23,41 @@ class Alpha2Agent(Agent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         if is_endgame:
             return Alpha2Agent.evalfn(board, player, opponent)
+        
         if maximizing:
-            move = random_move(board, opponent)
-            board_copy = deepcopy(board)
-            execute_move(board_copy, move, opponent)
-            return Alpha2Agent.mc_eval(board_copy, not maximizing, player, opponent)
-        else:
             move = random_move(board, player)
+            if move == None: #if no avail moves for player
+                is_endgame, _, _ = check_endgame(board, player, opponent) #check if game over
+                if is_endgame:
+                    return Alpha2Agent.evalfn(board, player, opponent)
+                else:
+                    move = random_move(board, opponent) #if not game over, generate play for opponent
+                    if move == none:
+                        return Alpha2Agent.evalfn(board, player, opponent) #if opponent also has no avail moves
+                    board_copy = deepcopy(board)
+                    execute_move(board_copy, move, opponent) 
+                    return Alpha2Agent.mc_eval(board_copy, maximizing, player, opponent)
+            
             board_copy = deepcopy(board)
             execute_move(board_copy, move, player)
+            return Alpha2Agent.mc_eval(board_copy, not maximizing, player, opponent)
+     
+        else:
+            move = random_move(board, opponent)
+            if move == None: #if no avail moves for opponent
+                is_endgame, _, _ = check_endgame(board, player, opponent) #check if game over
+                if is_endgame:
+                    return Alpha2Agent.evalfn(board, player, opponent)
+                else:
+                    move = random_move(board, player) #if not game over, generate play for player
+                    if move == none:
+                        return Alpha2Agent.evalfn(board, player, player) #if player also has no avail moves
+                    board_copy = deepcopy(board)
+                    execute_move(board_copy, move, player) 
+                    return Alpha2Agent.mc_eval(board_copy, maximizing, player, opponent)
+                        
+            board_copy = deepcopy(board)
+            execute_move(board_copy, move, opponent)
             return Alpha2Agent.mc_eval(board_copy, not maximizing, player, opponent)
 
     @staticmethod
