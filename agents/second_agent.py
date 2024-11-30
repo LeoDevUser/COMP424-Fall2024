@@ -17,6 +17,7 @@ class SecondAgent(Agent):
         self.boardfill = 0
         self.boardsize = -1
         self.avoid = [] #tells us which squares to avoid
+        self.corners = [] #corners
         self.prefer = [] #tells us which squares to prioritize
 
     def updatefill(self, board, player):
@@ -30,6 +31,13 @@ class SecondAgent(Agent):
         return count / self.boardsize
 
 
+    def initprefer(self, board):
+        for i in range(len(board)):
+            self.prefer.append((0,i))
+            self.prefer.append((len(board)-1,0))
+            self.prefer.append((i,0))
+            self.prefer.append((i,len(board)-1))
+
     def initavoid(self, board):
         for i in range(len(board)):
             self.avoid.append((1,i))
@@ -37,13 +45,13 @@ class SecondAgent(Agent):
             self.avoid.append((i,1))
             self.avoid.append((i,len(board)-2))
 
-    def initprefer(self, board):
+    def initcorners(self, board):
         #add corners
         size = len(board) - 1
-        self.prefer.append((0,0))
-        self.prefer.append((size,0))
-        self.prefer.append((0,size))
-        self.prefer.append((size,size))
+        self.corners.append((0,0))
+        self.corners.append((size,0))
+        self.corners.append((0,size))
+        self.corners.append((size,size))
         
     def promising_moves(self,valid_moves, board, player, opp, key):
         #returns up to 5 of the best moves
@@ -60,18 +68,25 @@ class SecondAgent(Agent):
             _,p1,p2 = check_endgame(simb, player, opp)
             if move in self.avoid:
                 if key == find_low_n:
-                    p1 += 3
-                    p2 += 3
+                    p1 += 4
+                    p2 += 4
                 else:
-                    p1 -= 3
-                    p2 -= 3
+                    p1 -= 4
+                    p2 -= 4
+            if move in self.corners:
+                if key == find_low_n:
+                    p1 -= 15
+                    p2 -= 15
+                else:
+                    p1 += 15
+                    p2 += 15
             if move in self.prefer:
                 if key == find_low_n:
-                    p1 -= 10
-                    p2 -= 10
+                    p1 -= 5
+                    p2 -= 5
                 else:
-                    p1 += 10
-                    p2 += 10
+                    p1 += 5
+                    p2 += 5
             if player == 1:
                 scores.append((move,p1))
             else:
@@ -88,7 +103,7 @@ class SecondAgent(Agent):
         maxscore = 0
         bestmove = None
         
-        if self.boardfill < 0.3:
+        if self.boardfill < 0.25:
             key = find_low_n
         else:
             key = find_top_n
@@ -106,9 +121,9 @@ class SecondAgent(Agent):
             if (time_taken > 1.9):#to avoid exceeding time
                 break
 
-            for i in range(5):
+            for i in range(6):
                 #simulate 5 games per chosen moves
-                counter  = 100;#only go down to specified depth
+                counter  = 80;#only go down to specified depth
                 simb2 = deepcopy(simb)#simulated board
                 while(not is_endgame and counter > 0):
                     tmp = random_move(simb2, simplayer)
