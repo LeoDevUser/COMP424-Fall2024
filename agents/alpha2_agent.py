@@ -209,7 +209,7 @@ class Alpha2Agent(Agent):
             moves = get_valid_moves(board, opponent)
 
             if depth == 1:
-                self.boardfill = Alpha2Agent.updatefill(self,chess_board,player)
+                self.boardfill = Alpha2Agent.updatefill(self, board ,player)
                 maxscore = 0
                 bestmove = None
                 
@@ -218,7 +218,7 @@ class Alpha2Agent(Agent):
                 else:
                     key = find_top_n
         
-                moves = Alpha2Agent.promising_moves(self,valid_moves, chess_board, player, opponent, key)
+                moves = Alpha2Agent.promising_moves(self,valid_moves, board, player, opponent, key)
 
 
 
