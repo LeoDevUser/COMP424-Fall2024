@@ -175,7 +175,7 @@ class Alpha2Agent(Agent):
             moves = get_valid_moves(board, player)
 
             if depth == 1:
-                self.boardfill = Alpha2Agent.updatefill(self,chess_board,player)
+                self.boardfill = Alpha2Agent.updatefill(self, board,player)
                 maxscore = 0
                 bestmove = None
                 
@@ -184,7 +184,7 @@ class Alpha2Agent(Agent):
                 else:
                     key = find_top_n
 
-                moves = Alpha2Agent.promising_moves(self, moves, chess_board, player, opponent, key)
+                moves = Alpha2Agent.promising_moves(self, moves, board, player, opponent, key)
             
             if moves == None:
             # Player has no valid moves; pass the turn to the opponent
