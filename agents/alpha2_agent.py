@@ -12,11 +12,58 @@ class Alpha2Agent(Agent):
     def __init__(self):
         super(Alpha2Agent, self).__init__()
         self.name = "Alpha2Agent"
+        self.boardfill = 0
+        self.boardsize = -1
+        self.avoid = [] #tells us which squares to avoid
+        self.prefer = [] #tells us which squares to prioritize
 
     @staticmethod
     def evalfn(board, player, opponent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         return (p0_score - p1_score)
+
+    def updatefill(self, board, player):
+        if self.boardsize == -1:
+            self.boardsize = len(board) ** 2 #getboardsize
+        count = 0
+        for row in board:
+            for entry in row:
+                if entry != 0:
+                    count += 1
+        return count / self.boardsize
+
+  def promising_moves(self,valid_moves, board, player, opp, key):
+    #returns up to 5 of the best moves
+    #based on the utility of moves and position
+    scores = []
+    #compute the scores
+    if len(self.avoid) == 0:
+        self.initavoid(board)
+    if len(self.prefer) == 0:
+        self.initprefer(board)
+    for move in valid_moves:
+        simb = deepcopy(board)
+        execute_move(simb,move,player)
+        _,p1,p2 = check_endgame(simb, player, opp)
+        if move in self.avoid:
+            if key == find_low_n:
+                p1 += 3
+                p2 += 3
+            else:
+                p1 -= 3
+                p2 -= 3
+        if move in self.prefer:
+            if key == find_low_n:
+                p1 -= 10
+                p2 -= 10
+            else:
+                p1 += 10
+                p2 += 10
+        if player == 1:
+            scores.append((move,p1))
+        else:
+            scores.append((move,p2))
+    return key(scores, 5)
     
     @staticmethod
     def mc_eval(board, maximizing, player, opponent):
@@ -90,7 +137,7 @@ class Alpha2Agent(Agent):
                 return Alpha2Agent.minimax(board, depth, alpha, beta, False, player, opponent)
             max_eval = -float('inf')
 
-            #for move in moves:
+            
                 
             
             for move in moves:
