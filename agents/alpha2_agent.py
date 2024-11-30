@@ -22,23 +22,23 @@ class Alpha2Agent(Agent):
     def mc_eval(board, maximizing, player, opponent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         if is_endgame:
-            return evalfn(board, player, opponent)
+            return Alpha2Agent.evalfn(board, player, opponent)
         if Maxplayer:
             move = random_move(board, opponent)
             board_copy = deepcopy(board)
             execute_move(board_copy, move, opponent)
-            return mc_eval(board_copy, not maximizing, player, opponent)
+            return Alpha2Agent.mc_eval(board_copy, not maximizing, player, opponent)
         else:
             move = random_move(board, player)
             board_copy = deepcopy(board)
             execute_move(board_copy, move, player)
-            return mc_eval(board_copy, not maximizing, player, opponent)
+            return Alpha2Agent.mc_eval(board_copy, not maximizing, player, opponent)
 
     @staticmethod
     def montecarlo(board, maximizing, player, opponent, n_simulations):
         score_sum = 0
         for i in range(n_simulations):
-            score_sum += mc_eval(board, opponent, maximizing, player, opponent)
+            score_sum += Alpha2Agent.mc_eval(board, opponent, maximizing, player, opponent)
 
         return (score_sum/ n_simulations)
 
@@ -53,7 +53,7 @@ class Alpha2Agent(Agent):
         
         if (depth == 0):
             n = 5
-            return montecarlo(board, maximizing, player, opponent, n)
+            return Alpha2Agent.montecarlo(board, maximizing, player, opponent, n)
             
 
 
