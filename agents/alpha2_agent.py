@@ -17,8 +17,8 @@ class Alpha2Agent(Agent):
     def evalfn(board, player, opponent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         return (p0_score - p1_score)
-
-
+    
+    @staticmethod
     def mc_eval(board, Maxplayer, player, opponent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         if is_endgame:
@@ -34,6 +34,7 @@ class Alpha2Agent(Agent):
             execute_move(board_copy, move, player)
             return mc_eval(board_copy, not Maxplayer, player, opponent)
 
+    @staticmethod
     def montecarlo(board, Maxplayer, player, opponent, n_simulations):
         score_sum = 0
         for i in range(n_simulations):
