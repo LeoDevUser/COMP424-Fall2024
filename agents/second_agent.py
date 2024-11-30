@@ -14,6 +14,20 @@ class SecondAgent(Agent):
     def __init__(self):
         super(SecondAgent, self).__init__()
         self.name = "SecondAgent"
+        self.count = 3 #this is to update the board every n moves
+        self.boardfill = 0
+        self.boardsize = -1
+
+    def updatefill(self, board, player):
+        if self.boardsize == -1:
+            self.boardsize = len(board) ** 2 #getboardsize
+        count = 0
+        for row in board:
+            for entry in row:
+                if entry != 0:
+                    count += 1
+        return count / self.boardsize
+
 
     @staticmethod
     def promising_moves(valid_moves, board, player, opp):
@@ -41,6 +55,11 @@ class SecondAgent(Agent):
 
     def step(self, chess_board, player, opponent):
         start_time = time.time()
+        self.count -= 1
+        if self.count == 0:
+            self.boardfill = SecondAgent.updatefill(self,chess_board,player)
+            print("board filled at ", self.boardfill, "%")
+            self.count = 3
         valid_moves = get_valid_moves(chess_board, player)
         if len(valid_moves) == 0:
             return None
