@@ -85,7 +85,7 @@ class Alpha2Agent(Agent):
 
     def step(self, chess_board, player, opponent):
         start_time = time.time()
-        depth = 5
+        depth = 4
         valid_moves = get_valid_moves(chess_board, player)
 
         if not valid_moves:
