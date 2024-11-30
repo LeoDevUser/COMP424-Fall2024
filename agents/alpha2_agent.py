@@ -73,13 +73,13 @@ class Alpha2Agent(Agent):
     @staticmethod
     def minimax(board, depth, alpha, beta, maximizing, player, opponent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)    
-        if   is_endgame:
+        if   is_endgame or depth == 0:
             return p0_score - p1_score
 
         
-        if (depth == 0):
-            n = 3
-            return Alpha2Agent.montecarlo(board, maximizing, player, opponent, n)
+        #if (depth == 0):
+            #n = 3
+            #return Alpha2Agent.montecarlo(board, maximizing, player, opponent, n)
             
 
 
