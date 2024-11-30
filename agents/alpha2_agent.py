@@ -22,48 +22,88 @@ class Alpha2Agent(Agent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         return (p0_score - p1_score)
 
-    def updatefill(self, board, player):
-        if self.boardsize == -1:
-            self.boardsize = len(board) ** 2 #getboardsize
-        count = 0
-        for row in board:
-            for entry in row:
-                if entry != 0:
-                    count += 1
-        return count / self.boardsize
 
-  def promising_moves(self,valid_moves, board, player, opp, key):
-    #returns up to 5 of the best moves
-    #based on the utility of moves and position
-    scores = []
-    #compute the scores
-    if len(self.avoid) == 0:
-        self.initavoid(board)
-    if len(self.prefer) == 0:
-        self.initprefer(board)
-    for move in valid_moves:
-        simb = deepcopy(board)
-        execute_move(simb,move,player)
-        _,p1,p2 = check_endgame(simb, player, opp)
-        if move in self.avoid:
-            if key == find_low_n:
-                p1 += 3
-                p2 += 3
+
+
+
+    def updatefill(self, board, player):
+    if self.boardsize == -1:
+        self.boardsize = len(board) ** 2 #getboardsize
+    count = 0
+    for row in board:
+        for entry in row:
+            if entry != 0:
+                count += 1
+    return count / self.boardsize
+
+
+    def initavoid(self, board):
+        for i in range(len(board)):
+            self.avoid.append((1,i))
+            self.avoid.append((len(board)-2,i))
+            self.avoid.append((i,1))
+            self.avoid.append((i,len(board)-2))
+
+    def initprefer(self, board):
+        #add corners
+        size = len(board) - 1
+        self.prefer.append((0,0))
+        self.prefer.append((size,0))
+        self.prefer.append((0,size))
+        self.prefer.append((size,size))
+        
+    def promising_moves(self,valid_moves, board, player, opp, key):
+        #returns up to 5 of the best moves
+        #based on the utility of moves and position
+        scores = []
+        #compute the scores
+        if len(self.avoid) == 0:
+            self.initavoid(board)
+        if len(self.prefer) == 0:
+            self.initprefer(board)
+        for move in valid_moves:
+            simb = deepcopy(board)
+            execute_move(simb,move,player)
+            _,p1,p2 = check_endgame(simb, player, opp)
+            if move in self.avoid:
+                if key == find_low_n:
+                    p1 += 3
+                    p2 += 3
+                else:
+                    p1 -= 3
+                    p2 -= 3
+            if move in self.prefer:
+                if key == find_low_n:
+                    p1 -= 10
+                    p2 -= 10
+                else:
+                    p1 += 10
+                    p2 += 10
+            if player == 1:
+                scores.append((move,p1))
             else:
-                p1 -= 3
-                p2 -= 3
-        if move in self.prefer:
-            if key == find_low_n:
-                p1 -= 10
-                p2 -= 10
-            else:
-                p1 += 10
-                p2 += 10
-        if player == 1:
-            scores.append((move,p1))
-        else:
-            scores.append((move,p2))
-    return key(scores, 5)
+                scores.append((move,p2))
+        return key(scores, 10)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
     
     @staticmethod
     def mc_eval(board, maximizing, player, opponent):
@@ -132,7 +172,20 @@ class Alpha2Agent(Agent):
 
         if maximizing:
             moves = get_valid_moves(board, player)
-            if not moves:
+
+            if depth == 1:
+                self.boardfill = SecondAgent.updatefill(self,chess_board,player)
+                maxscore = 0
+                bestmove = None
+                
+                if self.boardfill < 0.3:
+                    key = find_low_n
+                else:
+                    key = find_top_n
+
+                moves = SecondAgent.promising_moves(self,valid_moves, chess_board, player, opponent, key)
+            
+            if moves == None:
             # Player has no valid moves; pass the turn to the opponent
                 return Alpha2Agent.minimax(board, depth, alpha, beta, False, player, opponent)
             max_eval = -float('inf')
@@ -154,7 +207,24 @@ class Alpha2Agent(Agent):
 
         else:
             moves = get_valid_moves(board, opponent)
-            if not moves:
+
+            if depth == 1:
+                self.boardfill = SecondAgent.updatefill(self,chess_board,player)
+                maxscore = 0
+                bestmove = None
+                
+                if self.boardfill < 0.3:
+                    key = find_low_n
+                else:
+                    key = find_top_n
+        
+                moves = SecondAgent.promising_moves(self,valid_moves, chess_board, player, opponent, key)
+
+
+
+
+            
+            if moves == None:
             # Opponent has no valid moves; pass the turn back to the player
                 return Alpha2Agent.minimax(board, depth, alpha, beta, True, player, opponent)
             min_eval = float('inf')
