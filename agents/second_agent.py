@@ -14,9 +14,9 @@ class SecondAgent(Agent):
     def __init__(self):
         super(SecondAgent, self).__init__()
         self.name = "SecondAgent"
-        #self.count = 3 #this is to update the board every n moves
         self.boardfill = 0
         self.boardsize = -1
+        self.avoid = [] #tells us which squares to avoid
 
     def updatefill(self, board, player):
         if self.boardsize == -1:
@@ -48,18 +48,14 @@ class SecondAgent(Agent):
 
     def step(self, chess_board, player, opponent):
         start_time = time.time()
-        #self.count -= 1
         valid_moves = get_valid_moves(chess_board, player)
         if len(valid_moves) == 0:
             return None
-        #if self.count == 0:
         self.boardfill = SecondAgent.updatefill(self,chess_board,player)
-        #print("board filled at ", self.boardfill, "%")
-        #self.count = 3
         maxscore = 0
         bestmove = None
         
-        if self.boardfill < 0.5:
+        if self.boardfill < 0.3:
             key = find_low_n
         else:
             key = find_top_n
