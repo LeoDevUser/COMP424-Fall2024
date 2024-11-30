@@ -36,7 +36,7 @@ class Alpha2Agent(Agent):
 
     def montecarlo(board, Maxplayer, player, opponent, n_simulations):
         score_sum = 0
-        for i in range(n_simulations)
+        for i in range(n_simulations):
             score_sum += mc_eval(board, opponent, Maxplayer, player, opponent)
 
         return (score_sum/ n_simulations)
