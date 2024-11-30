@@ -187,7 +187,7 @@ class Alpha2Agent(Agent):
             
             if moves == None:
             # Player has no valid moves; pass the turn to the opponent
-                return Alpha2Agent.minimax(board, depth, alpha, beta, False, player, opponent)
+                return Alpha2Agent.minimax(self, board, depth, alpha, beta, False, player, opponent)
             max_eval = -float('inf')
 
             
@@ -196,7 +196,7 @@ class Alpha2Agent(Agent):
             for move in moves:
                 board_copy = deepcopy(board)
                 execute_move(board_copy, move, player)
-                score_ = Alpha2Agent.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
+                score_ = Alpha2Agent.minimax(self, board_copy, depth - 1, alpha, beta, False, player, opponent)
                 max_eval = max(max_eval, score_)
                 alpha = max(alpha, score_)
                 if (beta <= alpha):
@@ -226,13 +226,13 @@ class Alpha2Agent(Agent):
             
             if moves == None:
             # Opponent has no valid moves; pass the turn back to the player
-                return Alpha2Agent.minimax(board, depth, alpha, beta, True, player, opponent)
+                return Alpha2Agent.minimax(self, board, depth, alpha, beta, True, player, opponent)
             min_eval = float('inf')
             
             for move in moves:
                 board_copy = deepcopy(board)
                 execute_move(board_copy, move, opponent)
-                score_ = Alpha2Agent.minimax(board_copy, depth - 1, alpha, beta, True, player, opponent)
+                score_ = Alpha2Agent.minimax(self, board_copy, depth - 1, alpha, beta, True, player, opponent)
                 min_eval = min(min_eval, score_)
                 beta = min(beta, score_)
                 if (beta <= alpha):
@@ -274,7 +274,7 @@ class Alpha2Agent(Agent):
         for move in valid_moves:
             new_board = deepcopy(chess_board)
             execute_move(new_board, move, player)
-            score = Alpha2Agent.minimax(new_board, depth - 1, alpha, beta, False, player, opponent)
+            score = Alpha2Agent.minimax(self, new_board, depth - 1, alpha, beta, False, player, opponent)
             if score > best_score:
                 best_score = score
                 best_move = move
