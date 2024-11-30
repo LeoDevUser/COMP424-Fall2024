@@ -27,14 +27,14 @@ class Alpha2Agent(Agent):
 
 
     def updatefill(self, board, player):
-    if self.boardsize == -1:
-        self.boardsize = len(board) ** 2 #getboardsize
-    count = 0
-    for row in board:
-        for entry in row:
-            if entry != 0:
-                count += 1
-    return count / self.boardsize
+        if self.boardsize == -1:
+            self.boardsize = len(board) ** 2 #getboardsize
+        count = 0
+        for row in board:
+            for entry in row:
+                if entry != 0:
+                    count += 1
+        return count / self.boardsize
 
 
     def initavoid(self, board):
