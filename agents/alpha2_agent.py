@@ -78,7 +78,7 @@ class Alpha2Agent(Agent):
 
         
         if (depth == 0):
-            n = 5
+            n = 3
             return Alpha2Agent.montecarlo(board, maximizing, player, opponent, n)
             
 
@@ -142,7 +142,7 @@ class Alpha2Agent(Agent):
 
     def step(self, chess_board, player, opponent):
         start_time = time.time()
-        depth = 4
+        depth = 3
         valid_moves = get_valid_moves(chess_board, player)
 
         if not valid_moves:
