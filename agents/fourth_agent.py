@@ -174,7 +174,7 @@ class FourthAgent(Agent):
                 break
             board_copy = deepcopy(chess_board)
             execute_move(board_copy, move, player)
-            score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent, time)
+            score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent, start_time)
             if score > best_score:
                 best_score = score
                 best_move = move
