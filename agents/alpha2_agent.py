@@ -73,13 +73,13 @@ class Alpha2Agent(Agent):
     @staticmethod
     def minimax(board, depth, alpha, beta, maximizing, player, opponent):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)    
-        if   is_endgame or depth == 0:
+        if   is_endgame:
             return p0_score - p1_score
 
         
-        #if (depth == 0):
-            #n = 3
-            #return Alpha2Agent.montecarlo(board, maximizing, player, opponent, n)
+        if (depth == 0):
+            n = 3
+            return Alpha2Agent.montecarlo(board, maximizing, player, opponent, n)
             
 
 
@@ -88,11 +88,12 @@ class Alpha2Agent(Agent):
             if not moves:
             # Player has no valid moves; pass the turn to the opponent
                 return Alpha2Agent.minimax(board, depth, alpha, beta, False, player, opponent)
-            max_eval = -float('inf')
 
-            #for move in moves:
+            if (depth == 1 and len(moves) >= 5):
+                moves = random.sample(moves, 5)
                 
-            
+            max_eval = -float('inf')
+                    
             for move in moves:
                 board_copy = deepcopy(board)
                 execute_move(board_copy, move, player)
@@ -110,8 +111,12 @@ class Alpha2Agent(Agent):
             if not moves:
             # Opponent has no valid moves; pass the turn back to the player
                 return Alpha2Agent.minimax(board, depth, alpha, beta, True, player, opponent)
-            min_eval = float('inf')
+
+
+            if (depth == 1 and len(moves) >= 5):
+                moves = random.sample(moves, 5)
             
+            min_eval = float('inf')
             for move in moves:
                 board_copy = deepcopy(board)
                 execute_move(board_copy, move, opponent)
@@ -142,7 +147,7 @@ class Alpha2Agent(Agent):
 
     def step(self, chess_board, player, opponent):
         start_time = time.time()
-        depth = 4
+        depth = 3
         valid_moves = get_valid_moves(chess_board, player)
 
         if not valid_moves:
