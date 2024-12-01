@@ -16,6 +16,8 @@ class FourthAgent(Agent):
         self.avoid = [] #tells us which squares to avoid
         self.corners = [] #corners
         self.prefer = [] #tells us which squares to prioritize
+        self.boardfill = 0
+        self.boardsize = -1
 
     def initprefer(self, board):
         for i in range(len(board)):
@@ -38,6 +40,16 @@ class FourthAgent(Agent):
         self.corners.append((size,0))
         self.corners.append((0,size))
         self.corners.append((size,size))
+
+    def updatefill(self, board, player):
+    if self.boardsize == -1:
+        self.boardsize = len(board) ** 2 #getboardsize
+    count = 0
+    for row in board:
+        for entry in row:
+            if entry != 0:
+                count += 1
+    return count / self.boardsize
         
     def evaluate_board(self, board, player, opp):
         # Initialize score
