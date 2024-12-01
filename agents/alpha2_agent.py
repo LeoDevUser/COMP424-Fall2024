@@ -54,10 +54,12 @@ class Alpha2Agent(Agent):
     @staticmethod
     def montecarlo(board, maximizing, player, opponent, n_simulations):
         score_sum = 0
-        for i in range(n_simulations):
-            score_sum += Alpha2Agent.mc_eval(board, maximizing, player, opponent)
+        #for i in range(n_simulations):
+            #score_sum += Alpha2Agent.mc_eval(board, maximizing, player, opponent)
 
-        return (score_sum/ n_simulations)
+        return  Alpha2Agent.mc_eval(board, maximizing, player, opponent)
+
+        #return (score_sum/ n_simulations)
 
 
 
