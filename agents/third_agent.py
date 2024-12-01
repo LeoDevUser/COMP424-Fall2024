@@ -106,7 +106,6 @@ class ThirdAgent(Agent):
 
 
     def minimax(self, board, depth, alpha, beta, maximizing, player, opponent):
-        board_size = len(board[0])
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         if is_endgame:
             # Assign a large positive or negative score based on the game result
@@ -127,7 +126,6 @@ class ThirdAgent(Agent):
                 return self.minimax(board, depth - 1, alpha, beta, False, player, opponent)
             max_eval = -float('inf')
             for move in moves:
-                start_time = time.time()
                 board_copy = deepcopy(board)
                 execute_move(board_copy, move, player)
                 score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
@@ -135,12 +133,6 @@ class ThirdAgent(Agent):
                 alpha = max(alpha, score)
                 if beta <= alpha:
                     break  # Beta cut-off
-
-                time_taken = time.time() - start_time
-                if time_taken > 1.0:
-                    break
-                if (self.boardfill < 0.25 and time_taken > 0.75):
-                    break
             return max_eval
     
         else:
@@ -150,7 +142,6 @@ class ThirdAgent(Agent):
                 return self.minimax(board, depth - 1, alpha, beta, True, player, opponent)
         min_eval = float('inf')
         for move in moves:
-            start_time = time.time()
             board_copy = deepcopy(board)
             execute_move(board_copy, move, opponent)
             score = self.minimax(board_copy, depth - 1, alpha, beta, True, player, opponent)
@@ -158,13 +149,6 @@ class ThirdAgent(Agent):
             beta = min(beta, score)
             if beta <= alpha:
                 break  # Alpha cut-off
-
-
-            time_taken = time.time() - start_time
-            if time_taken > 1.0:
-                break
-            if (self.boardfill < 0.25 and time_taken > 0.75):
-                break
         return min_eval
 
     
@@ -179,16 +163,12 @@ class ThirdAgent(Agent):
         self.boardfill = self.updatefill(chess_board, player)
     
         # Decide search depth based on the game phase
-        board_size = len(chess_board[0])
-        if board_size < 1:
-            if self.boardfill < 0.25:
-                depth = 3  # Early game
-            elif self.boardfill < 0.75:
-                depth = 4  # Mid game
-            else:
-                depth = 5  # Late game
+        if self.boardfill < 0.25:
+            depth = 3  # Early game
+        elif self.boardfill < 0.75:
+            depth = 3  # Mid game
         else:
-            depth = 3
+            depth = 3  # Late game
     
         best_move = None
         best_score = -float('inf')
@@ -201,7 +181,7 @@ class ThirdAgent(Agent):
         for move in valid_moves:
             time_taken = time.time() - start_time
             if time_taken > 1.9:
-                break
+                depth = 1   
             board_copy = deepcopy(chess_board)
             execute_move(board_copy, move, player)
             score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
