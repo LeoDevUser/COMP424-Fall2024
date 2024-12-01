@@ -4,6 +4,7 @@ import sys
 import numpy as np
 from copy import deepcopy
 import time
+import random
 from helpers import random_move, count_capture, execute_move, check_endgame, get_valid_moves
 
 @register_agent("alpha2_agent")
