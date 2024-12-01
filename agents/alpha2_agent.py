@@ -104,8 +104,8 @@ class Alpha2Agent(Agent):
                 return Alpha2Agent.minimax(board, depth, alpha, beta, True, player, opponent)
 
 
-            if (depth == 1 and len(moves) >= 5):
-                moves = random.sample(moves, 5)
+            if (depth == 1 and len(moves) >= 3):
+                moves = random.sample(moves, 3)
             
             min_eval = float('inf')
             for move in moves:
