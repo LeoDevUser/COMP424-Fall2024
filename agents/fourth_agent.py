@@ -171,7 +171,7 @@ class FourthAgent(Agent):
         for move in valid_moves:
             time_taken = time.time() - start_time
             if time_taken > 1.9:
-                break
+                depth = 1
             board_copy = deepcopy(chess_board)
             execute_move(board_copy, move, player)
             score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent, start_time)
