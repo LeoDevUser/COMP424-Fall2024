@@ -114,10 +114,10 @@ class FourthAgent(Agent):
             return self.evaluate_board(board, player, opponent)
 
         duration = time.time() - start_time
-        board_size = len(board[0])
-        if board_size > 9 and duration > 1.75:
-            return self.evaluate_board(board, player, opponent)
-        elif duration > 1.85:
+        #board_size = len(board[0])
+        #if board_size > 9 and duration > 1.75:
+        #    return self.evaluate_board(board, player, opponent)
+        if duration > 1.85:
             return self.evaluate_board(board, player, opponent)
             
 
