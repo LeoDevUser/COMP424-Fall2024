@@ -199,6 +199,9 @@ class ThirdAgent(Agent):
         # valid_moves = self.promising_moves(valid_moves, chess_board, player, opponent, n=5)
     
         for move in valid_moves:
+            time_taken = time.time() - start_time
+            if time_taken > 1.95:
+                break
             board_copy = deepcopy(chess_board)
             execute_move(board_copy, move, player)
             score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
