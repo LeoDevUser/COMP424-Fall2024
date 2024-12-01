@@ -32,12 +32,7 @@ class Alpha2Agent(Agent):
                 if is_endgame:
                     return Alpha2Agent.evalfn(board, player, opponent)
                 else:
-                    move = random_move(board, opponent) #if not game over, generate play for opponent
-                    if move == None:
-                        return Alpha2Agent.evalfn(board, player, opponent) #if opponent also has no avail moves
-                    board_copy = deepcopy(board)
-                    execute_move(board_copy, move, opponent) 
-                    return Alpha2Agent.mc_eval(board_copy, maximizing, player, opponent)
+                    return Alpha2Agent.mc_eval(board_copy, not maximizing, player, opponent)
             
             board_copy = deepcopy(board)
             execute_move(board_copy, move, player)
@@ -50,12 +45,7 @@ class Alpha2Agent(Agent):
                 if is_endgame:
                     return Alpha2Agent.evalfn(board, player, opponent)
                 else:
-                    move = random_move(board, player) #if not game over, generate play for player
-                    if move == None:
-                        return Alpha2Agent.evalfn(board, player, player) #if player also has no avail moves
-                    board_copy = deepcopy(board)
-                    execute_move(board_copy, move, player) 
-                    return Alpha2Agent.mc_eval(board_copy, maximizing, player, opponent)
+                    return Alpha2Agent.mc_eval(board_copy, not maximizing, player, opponent)
                         
             board_copy = deepcopy(board)
             execute_move(board_copy, move, opponent)
