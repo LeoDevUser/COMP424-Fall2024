@@ -110,7 +110,7 @@ class FourthAgent(Agent):
                 return 0  # Draw
 
         duration = time.time() - start_time
-        if depth == 0 or duration > 1.9:
+        if depth == 0 or duration > 1.85:
             return self.evaluate_board(board, player, opponent)
 
         if maximizing:
@@ -170,7 +170,7 @@ class FourthAgent(Agent):
     
         for move in valid_moves:
             time_taken = time.time() - start_time
-            if time_taken > 1.85:
+            if time_taken > 1.9:
                 depth = 1
             board_copy = deepcopy(chess_board)
             execute_move(board_copy, move, player)
