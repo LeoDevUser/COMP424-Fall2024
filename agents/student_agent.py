@@ -13,22 +13,9 @@ class StudentAgent(Agent):
     def __init__(self):
         super(StudentAgent, self).__init__()
         self.name = "StudentAgent"
-        self.boardfill = 0
-        self.boardsize = -1
         self.avoid = [] #tells us which squares to avoid
         self.corners = [] #corners
         self.prefer = [] #tells us which squares to prioritize
-
-    def updatefill(self, board, player):
-        if self.boardsize == -1:
-            self.boardsize = len(board) ** 2 #getboardsize
-        count = 0
-        for row in board:
-            for entry in row:
-                if entry != 0:
-                    count += 1
-        return count / self.boardsize
-
 
     def initprefer(self, board):
         for i in range(len(board)):
@@ -151,17 +138,7 @@ class StudentAgent(Agent):
         if not valid_moves:
             return None
     
-        # Update board fill percentage
-        if self.boardfill < 0.75:
-            self.boardfill = self.updatefill(chess_board, player)
-    
-        # Decide search depth based on the game phase
-        if self.boardfill < 0.25:
-            depth = 3  # Early game
-        elif self.boardfill < 0.75:
-            depth = 3  # Mid game
-        else:
-            depth = 3  # Late game
+        depth = 3
     
         best_move = None
         best_score = -float('inf')
