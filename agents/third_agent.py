@@ -175,12 +175,16 @@ class ThirdAgent(Agent):
         self.boardfill = self.updatefill(chess_board, player)
     
         # Decide search depth based on the game phase
-        if self.boardfill < 0.25:
-            depth = 3  # Early game
-        elif self.boardfill < 0.75:
-            depth = 4  # Mid game
+        board_size = len(chess_board[0])
+        if board_size < 10:
+            if self.boardfill < 0.25:
+                depth = 3  # Early game
+            elif self.boardfill < 0.75:
+                depth = 4  # Mid game
+            else:
+                depth = 5  # Late game
         else:
-            depth = 5  # Late game
+            depth = 3
     
         best_move = None
         best_score = -float('inf')
