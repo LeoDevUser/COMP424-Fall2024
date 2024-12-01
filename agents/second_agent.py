@@ -39,7 +39,7 @@ class SecondAgent(Agent):
             self.prefer.append((i,len(board)-1))
 
     def initavoid(self, board):
-        for i in range(len(board)):
+        for i in range(2,len(board)):
             self.avoid.append((1,i))
             self.avoid.append((len(board)-2,i))
             self.avoid.append((i,1))
@@ -66,40 +66,43 @@ class SecondAgent(Agent):
             simb = deepcopy(board)
             execute_move(simb,move,player)
             _,p1,p2 = check_endgame(simb, player, opp)
+            #now, we want to minimize the avail moves for the opp
+            opp_score = len(get_valid_moves(simb, 3 - player))
             if move in self.avoid:
                 if key == find_low_n:
-                    p1 += 4
-                    p2 += 4
+                    p1 += 6 - opp_score
+                    p2 += 6 - opp_score
                 else:
-                    p1 -= 4
-                    p2 -= 4
+                    p1 -= 6 + opp_score
+                    p2 -= 6 + opp_score
             if move in self.corners:
                 if key == find_low_n:
-                    p1 -= 15
-                    p2 -= 15
+                    p1 -= 12 + opp_score
+                    p2 -= 12 + opp_score
                 else:
-                    p1 += 15
-                    p2 += 15
+                    p1 += 12 - opp_score
+                    p2 += 12 - opp_score
             if move in self.prefer:
                 if key == find_low_n:
-                    p1 -= 5
-                    p2 -= 5
+                    p1 -= 6 + opp_score
+                    p2 -= 6 + opp_score
                 else:
-                    p1 += 5
-                    p2 += 5
+                    p1 += 6 - opp_score
+                    p2 += 6 - opp_score
+
             if player == 1:
                 scores.append((move,p1))
             else:
                 scores.append((move,p2))
         return key(scores, 5)
 
-
     def step(self, chess_board, player, opponent):
         start_time = time.time()
         valid_moves = get_valid_moves(chess_board, player)
         if len(valid_moves) == 0:
             return None
-        self.boardfill = SecondAgent.updatefill(self,chess_board,player)
+        if self.boardfill < 0.25:
+            self.boardfill = SecondAgent.updatefill(self,chess_board,player)
         maxscore = 0
         bestmove = None
         
@@ -121,9 +124,9 @@ class SecondAgent(Agent):
             if (time_taken > 1.9):#to avoid exceeding time
                 break
 
-            for i in range(6):
-                #simulate 5 games per chosen moves
-                counter  = 80;#only go down to specified depth
+            for i in range(5):
+                #simulate 6 games per chosen moves
+                counter  = 100;#only go down to specified depth
                 simb2 = deepcopy(simb)#simulated board
                 while(not is_endgame and counter > 0):
                     tmp = random_move(simb2, simplayer)
