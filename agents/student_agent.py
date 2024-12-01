@@ -16,6 +16,18 @@ class StudentAgent(Agent):
         self.avoid = [] #tells us which squares to avoid
         self.corners = [] #corners
         self.prefer = [] #tells us which squares to prioritize
+        self.start = 0
+
+    def itDepth(self):
+        elapsed = time.time() - self.start
+        if elapsed < 0.4:
+            return 4
+        elif elapsed < 0.7:
+            return 3
+        elif elapsed < 1.2:
+            return 2
+        else:
+            return 1
 
     def initprefer(self, board):
         for i in range(len(board)):
@@ -104,12 +116,12 @@ class StudentAgent(Agent):
             moves = get_valid_moves(board, player)
             if not moves:
             # Pass the turn to the opponent
-                return self.minimax(board, depth - 1, alpha, beta, False, player, opponent)
+                return self.minimax(board, min(depth - 1, self.itDepth() - 1), alpha, beta, False, player, opponent)
             max_eval = -float('inf')
             for move in moves:
                 board_copy = deepcopy(board)
                 execute_move(board_copy, move, player)
-                score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
+                score = self.minimax(board_copy, min(depth - 1, self.itDepth() - 1), alpha, beta, False, player, opponent)
                 max_eval = max(max_eval, score)
                 alpha = max(alpha, score)
                 if beta <= alpha:
@@ -120,7 +132,7 @@ class StudentAgent(Agent):
             moves = get_valid_moves(board, opponent)
             if not moves:
                 # Pass the turn back to the player
-                return self.minimax(board, depth - 1, alpha, beta, True, player, opponent)
+                return self.minimax(board, min(depth - 1, self.itDepth() - 1), alpha, beta, True, player, opponent)
         min_eval = float('inf')
         for move in moves:
             board_copy = deepcopy(board)
@@ -133,12 +145,12 @@ class StudentAgent(Agent):
         return min_eval
             
     def step(self, chess_board, player, opponent):
-        start_time = time.time()
+        self.start = time.time()
         valid_moves = get_valid_moves(chess_board, player)
         if not valid_moves:
             return None
     
-        depth = 3
+        depth = self.itDepth()
     
         best_move = None
         best_score = -float('inf')
@@ -146,6 +158,10 @@ class StudentAgent(Agent):
         beta = float('inf')
     
         for move in valid_moves:
+            # Check time to avoid exceeding time limit
+            time_taken = time.time() - self.start
+            if time_taken > 1.9:
+                break
             board_copy = deepcopy(chess_board)
             execute_move(board_copy, move, player)
             score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
@@ -156,11 +172,6 @@ class StudentAgent(Agent):
             if beta <= alpha:
                 break  # Alpha-beta pruning
     
-            # Check time to avoid exceeding time limit
-            time_taken = time.time() - start_time
-            if time_taken > 1.9:
-                break
-    
-        time_taken = time.time() - start_time
+        time_taken = time.time() - self.start
         print("My AI's turn took ", time_taken, "seconds.")
         return best_move
