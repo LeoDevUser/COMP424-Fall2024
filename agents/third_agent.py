@@ -166,9 +166,9 @@ class ThirdAgent(Agent):
         if self.boardfill < 0.25:
             depth = 3  # Early game
         elif self.boardfill < 0.75:
-            depth = 4  # Mid game
+            depth = 3  # Mid game
         else:
-            depth = 5  # Late game
+            depth = 3  # Late game
     
         best_move = None
         best_score = -float('inf')
