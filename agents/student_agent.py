@@ -20,11 +20,11 @@ class StudentAgent(Agent):
 
     def itDepth(self):
         elapsed = time.time() - self.start
-        if elapsed < 0.4:
+        if elapsed < 0.1:
             return 4
-        elif elapsed < 0.7:
+        elif elapsed < 0.3:
             return 3
-        elif elapsed < 1.2:
+        elif elapsed < 0.6:
             return 2
         else:
             return 1
