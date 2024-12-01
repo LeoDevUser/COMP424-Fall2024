@@ -180,7 +180,7 @@ class ThirdAgent(Agent):
     
         # Decide search depth based on the game phase
         board_size = len(chess_board[0])
-        if board_size < 10:
+        if board_size < 1:
             if self.boardfill < 0.25:
                 depth = 3  # Early game
             elif self.boardfill < 0.75:
