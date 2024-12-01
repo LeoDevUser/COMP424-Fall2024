@@ -106,6 +106,7 @@ class ThirdAgent(Agent):
 
 
     def minimax(self, board, depth, alpha, beta, maximizing, player, opponent):
+        board_size = len(board[0])
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         if is_endgame:
             # Assign a large positive or negative score based on the game result
@@ -136,7 +137,7 @@ class ThirdAgent(Agent):
                     break  # Beta cut-off
 
                 time_taken = time.time() - start_time
-                if time_taken > 1.5:
+                if (board_size > 10 and time_taken > 1.3):
                     break
             return max_eval
     
@@ -158,7 +159,7 @@ class ThirdAgent(Agent):
 
 
             time_taken = time.time() - start_time
-            if time_taken > 1.5:
+            if (board_size > 10 and time_taken > 1.3):
                 break
         return min_eval
 
@@ -177,9 +178,9 @@ class ThirdAgent(Agent):
         if self.boardfill < 0.25:
             depth = 3  # Early game
         elif self.boardfill < 0.75:
-            depth = 3  # Mid game
+            depth = 4  # Mid game
         else:
-            depth = 3  # Late game
+            depth = 5  # Late game
     
         best_move = None
         best_score = -float('inf')
