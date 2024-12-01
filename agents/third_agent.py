@@ -200,7 +200,7 @@ class ThirdAgent(Agent):
     
         for move in valid_moves:
             time_taken = time.time() - start_time
-            if time_taken > 1.95:
+            if time_taken > 1.99:
                 break
             board_copy = deepcopy(chess_board)
             execute_move(board_copy, move, player)
