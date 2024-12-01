@@ -86,7 +86,7 @@ class FourthAgent(Agent):
     
         return score
 
-    def minimax(self, board, depth, alpha, beta, maximizing, player, opponent):
+    def minimax(self, board, depth, alpha, beta, maximizing, player, opponent, time):
         is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
         if is_endgame:
             # Assign a large positive or negative score based on the game result
@@ -97,19 +97,20 @@ class FourthAgent(Agent):
             else:
                 return 0  # Draw
 
-        if depth == 0:
+        duration = time.time() - time
+        if depth == 0 or duration > 1.9:
             return self.evaluate_board(board, player, opponent)
 
         if maximizing:
             moves = get_valid_moves(board, player)
             if not moves:
             # Pass the turn to the opponent
-                return self.minimax(board, depth - 1, alpha, beta, False, player, opponent)
+                return self.minimax(board, depth - 1, alpha, beta, False, player, opponent, time)
             max_eval = -float('inf')
             for move in moves:
                 board_copy = deepcopy(board)
                 execute_move(board_copy, move, player)
-                score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
+                score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent, time)
                 max_eval = max(max_eval, score)
                 alpha = max(alpha, score)
                 if beta <= alpha:
@@ -120,12 +121,12 @@ class FourthAgent(Agent):
             moves = get_valid_moves(board, opponent)
             if not moves:
                 # Pass the turn back to the player
-                return self.minimax(board, depth - 1, alpha, beta, True, player, opponent)
+                return self.minimax(board, depth - 1, alpha, beta, True, player, opponent, time)
         min_eval = float('inf')
         for move in moves:
             board_copy = deepcopy(board)
             execute_move(board_copy, move, opponent)
-            score = self.minimax(board_copy, depth - 1, alpha, beta, True, player, opponent)
+            score = self.minimax(board_copy, depth - 1, alpha, beta, True, player, opponent, time)
             min_eval = min(min_eval, score)
             beta = min(beta, score)
             if beta <= alpha:
@@ -146,9 +147,12 @@ class FourthAgent(Agent):
         beta = float('inf')
     
         for move in valid_moves:
+            time_taken = time.time() - start_time
+            if time_taken > 1.9:
+                break
             board_copy = deepcopy(chess_board)
             execute_move(board_copy, move, player)
-            score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
+            score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent, time)
             if score > best_score:
                 best_score = score
                 best_move = move
