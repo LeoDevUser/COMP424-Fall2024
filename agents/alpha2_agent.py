@@ -32,7 +32,7 @@ class Alpha2Agent(Agent):
                 if is_endgame:
                     return Alpha2Agent.evalfn(board, player, opponent)
                 else:
-                    return Alpha2Agent.mc_eval(board_copy, not maximizing, player, opponent)
+                    return Alpha2Agent.mc_eval(board, not maximizing, player, opponent)
             
             board_copy = deepcopy(board)
             execute_move(board_copy, move, player)
@@ -45,7 +45,7 @@ class Alpha2Agent(Agent):
                 if is_endgame:
                     return Alpha2Agent.evalfn(board, player, opponent)
                 else:
-                    return Alpha2Agent.mc_eval(board_copy, not maximizing, player, opponent)
+                    return Alpha2Agent.mc_eval(board, not maximizing, player, opponent)
                         
             board_copy = deepcopy(board)
             execute_move(board_copy, move, opponent)
