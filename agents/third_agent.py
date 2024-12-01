@@ -137,9 +137,9 @@ class ThirdAgent(Agent):
                     break  # Beta cut-off
 
                 time_taken = time.time() - start_time
-                if time_taken > 1.25:
+                if time_taken > 1.0:
                     break
-                if (self.boardfill < 0.25 and time_taken > 0.8):
+                if (self.boardfill < 0.25 and time_taken > 0.75):
                     break
             return max_eval
     
@@ -161,9 +161,9 @@ class ThirdAgent(Agent):
 
 
             time_taken = time.time() - start_time
-            if time_taken > 1.25:
+            if time_taken > 1.0:
                 break
-            if (self.boardfill < 0.25 and time_taken > 0.8):
+            if (self.boardfill < 0.25 and time_taken > 0.75):
                 break
         return min_eval
 
