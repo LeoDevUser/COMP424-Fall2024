@@ -139,7 +139,17 @@ class FourthAgent(Agent):
         if not valid_moves:
             return None
     
-        depth = 3
+        # Update board fill percentage
+        self.boardfill = self.updatefill(chess_board, player)
+    
+        # Decide search depth based on the game phase
+        if self.boardfill < 0.25:
+            depth = 3  # Early game
+        elif self.boardfill < 0.75:
+            depth = 3  # Mid game
+        else:
+            depth = 3  # Late game
+    
     
         best_move = None
         best_score = -float('inf')
