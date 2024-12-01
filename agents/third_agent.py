@@ -126,6 +126,7 @@ class ThirdAgent(Agent):
                 return self.minimax(board, depth - 1, alpha, beta, False, player, opponent)
             max_eval = -float('inf')
             for move in moves:
+                start_time = time.time()
                 board_copy = deepcopy(board)
                 execute_move(board_copy, move, player)
                 score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
@@ -133,6 +134,10 @@ class ThirdAgent(Agent):
                 alpha = max(alpha, score)
                 if beta <= alpha:
                     break  # Beta cut-off
+
+                time_taken = time.time() - start_time
+                if time_taken > 1.5:
+                    break
             return max_eval
     
         else:
@@ -142,6 +147,7 @@ class ThirdAgent(Agent):
                 return self.minimax(board, depth - 1, alpha, beta, True, player, opponent)
         min_eval = float('inf')
         for move in moves:
+            start_time = time.time()
             board_copy = deepcopy(board)
             execute_move(board_copy, move, opponent)
             score = self.minimax(board_copy, depth - 1, alpha, beta, True, player, opponent)
@@ -149,6 +155,11 @@ class ThirdAgent(Agent):
             beta = min(beta, score)
             if beta <= alpha:
                 break  # Alpha cut-off
+
+
+            time_taken = time.time() - start_time
+            if time_taken > 1.5:
+                break
         return min_eval
 
     
