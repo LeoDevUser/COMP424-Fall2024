@@ -53,114 +53,151 @@ class ThirdAgent(Agent):
         self.corners.append((0,size))
         self.corners.append((size,size))
         
-    def promising_moves(self,valid_moves, board, player, opp, key):
-        #returns up to 5 of the best moves
-        #based on the utility of moves and position
-        scores = []
-        #compute the scores
-        if len(self.avoid) == 0:
+    def evaluate_board(self, board, player, opp):
+        # Initialize score
+        score = 0
+    
+        # Ensure avoid, prefer, and corners are initialized
+        if not self.avoid:
             self.initavoid(board)
-        if len(self.prefer) == 0:
+        if not self.prefer:
             self.initprefer(board)
-        for move in valid_moves:
-            simb = deepcopy(board)
-            execute_move(simb,move,player)
-            _,p1,p2 = check_endgame(simb, player, opp)
-            #now, we want to minimize the avail moves for the opp
-            opp_score = len(get_valid_moves(simb, 3 - player))
-            if move in self.avoid:
-                if key == find_low_n:
-                    p1 += 6
-                    p2 += 6
-                else:
-                    p1 -= 6
-                    p2 -= 6
-            if move in self.corners:
-                if key == find_low_n:
-                    p1 -= 12
-                    p2 -= 12
-                else:
-                    p1 += 12
-                    p2 += 12
-            if move in self.prefer:
-                if key == find_low_n:
-                    p1 -= 6
-                    p2 -= 6
-                else:
-                    p1 += 6
-                    p2 += 6
+        if not self.corners:
+            self.initcorners(board)
+    
+        # Weights for different positions
+        WEIGHT_CORNER = 25
+        WEIGHT_PREFER = 5
+        WEIGHT_AVOID = -5
+    
+        # Iterate over the board to calculate positional score
+        for i in range(len(board)):
+            for j in range(len(board)):
+                pos = (i, j)
+                if board[i][j] == player:
+                    if pos in self.corners:
+                        score += WEIGHT_CORNER
+                    elif pos in self.prefer:
+                        score += WEIGHT_PREFER
+                    elif pos in self.avoid:
+                        score += WEIGHT_AVOID
+                    else:
+                        score += 1  # Neutral position
+                elif board[i][j] == opp:
+                    if pos in self.corners:
+                        score -= WEIGHT_CORNER
+                    elif pos in self.prefer:
+                        score -= WEIGHT_PREFER
+                    elif pos in self.avoid:
+                        score -= WEIGHT_AVOID
+                    else:
+                        score -= 1  # Neutral position
+    
+        # Mobility: Difference in number of valid moves
+        player_moves = len(get_valid_moves(board, player))
+        opp_moves = len(get_valid_moves(board, opp))
+        score += (player_moves - opp_moves) * 2  # Mobility weight
+    
+        return score
 
-            #adjust to minimize opp avail moves
-            if key == find_low_n:
-                p1 += opp_score
-                p2 += opp_score
+
+
+
+
+
+    def minimax(self, board, depth, alpha, beta, maximizing, player, opponent):
+        is_endgame, p0_score, p1_score = check_endgame(board, player, opponent)
+        if is_endgame:
+            # Assign a large positive or negative score based on the game result
+            if p0_score > p1_score:
+                return 1000000 if player == 1 else -1000000
+            elif p0_score < p1_score:
+                return -1000000 if player == 1 else 1000000
             else:
-                p2 -= opp_score
-                p2 -= opp_score
+                return 0  # Draw
 
-            if player == 1:
-                scores.append((move,p1))
-            else:
-                scores.append((move,p2))
-        return key(scores, 5)
+        if depth == 0:
+            return self.evaluate_board(board, player, opponent)
 
+        if maximizing:
+            moves = get_valid_moves(board, player)
+            if not moves:
+            # Pass the turn to the opponent
+                return self.minimax(board, depth - 1, alpha, beta, False, player, opponent)
+            max_eval = -float('inf')
+            for move in moves:
+                board_copy = deepcopy(board)
+                execute_move(board_copy, move, player)
+                score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
+                max_eval = max(max_eval, score)
+                alpha = max(alpha, score)
+                if beta <= alpha:
+                    break  # Beta cut-off
+            return max_eval
+    
+        else:
+            moves = get_valid_moves(board, opponent)
+            if not moves:
+                # Pass the turn back to the player
+                return self.minimax(board, depth - 1, alpha, beta, True, player, opponent)
+        min_eval = float('inf')
+        for move in moves:
+            board_copy = deepcopy(board)
+            execute_move(board_copy, move, opponent)
+            score = self.minimax(board_copy, depth - 1, alpha, beta, True, player, opponent)
+            min_eval = min(min_eval, score)
+            beta = min(beta, score)
+            if beta <= alpha:
+                break  # Alpha cut-off
+        return min_eval
+
+    
+            
     def step(self, chess_board, player, opponent):
         start_time = time.time()
         valid_moves = get_valid_moves(chess_board, player)
-        if len(valid_moves) == 0:
+        if not valid_moves:
             return None
+    
+        # Update board fill percentage
+        self.boardfill = self.updatefill(chess_board, player)
+    
+        # Decide search depth based on the game phase
         if self.boardfill < 0.25:
-            self.boardfill = ThirdAgent.updatefill(self,chess_board,player)
-        maxscore = 0
-        bestmove = None
-        
-        if self.boardfill < 0.25:
-            key = find_low_n
+            depth = 3  # Early game
+        elif self.boardfill < 0.75:
+            depth = 4  # Mid game
         else:
-            key = find_top_n
-
-        valid_moves = ThirdAgent.promising_moves(self,valid_moves, chess_board, player, opponent, key)
+            depth = 5  # Late game
+    
+        best_move = None
+        best_score = -float('inf')
+        alpha = -float('inf')
+        beta = float('inf')
+    
+        # Optional: Use promising_moves to prioritize moves (not mandatory)
+        # valid_moves = self.promising_moves(valid_moves, chess_board, player, opponent, n=5)
+    
         for move in valid_moves:
-            simb = deepcopy(chess_board)#simulated board
-            is_endgame = False
-            execute_move(simb,move,player)
-            is_endgame,p1,p2 = check_endgame(simb, player, opponent)
-            simplayer = player
-            avgscore = 0
+            board_copy = deepcopy(chess_board)
+            execute_move(board_copy, move, player)
+            score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
+            if score > best_score:
+                best_score = score
+                best_move = move
+            alpha = max(alpha, best_score)
+            if beta <= alpha:
+                break  # Alpha-beta pruning
+    
+            # Check time to avoid exceeding time limit
             time_taken = time.time() - start_time
-
-            if (time_taken > 1.9):#to avoid exceeding time
+            if time_taken > 1.9:
                 break
-
-            for i in range(5):
-                #simulate 6 games per chosen moves
-                counter  = 100;#only go down to specified depth
-                simb2 = deepcopy(simb)#simulated board
-                while(not is_endgame and counter > 0):
-                    tmp = random_move(simb2, simplayer)
-                    if (tmp != None):
-                        execute_move(simb2,tmp,simplayer)
-                        is_endgame,p1,p2 = check_endgame(simb2, player, opponent)
-                    if (simplayer == player):
-                        simplayer = (3 - player)
-                    else:
-                        simplayer = player
-                    counter -= 1 #decrement counter
-
-                if(player == 1):#we are player 1
-                    avgscore += p1
-                else:#we are player 2
-                    avgscore += p2
-
-            #compute avg score
-            avgscore /= 5
-            if (avgscore > maxscore):
-                maxscore = avgscore
-                bestmove = move
-
+    
         time_taken = time.time() - start_time
         print("My AI's turn took ", time_taken, "seconds.")
-        return bestmove
+        return best_move
+
 
 def find_top_n(nums, n):
     #Finds the n highest values in a list.
