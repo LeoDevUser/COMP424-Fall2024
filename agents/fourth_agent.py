@@ -109,18 +109,11 @@ class FourthAgent(Agent):
             else:
                 return 0  # Draw
 
-        
-        if depth == 0:
-            return self.evaluate_board(board, player, opponent)
-
         duration = time.time() - start_time
-        #board_size = len(board[0])
-        #if board_size > 9 and duration > 1.75:
-        #    return self.evaluate_board(board, player, opponent)
-        if duration > 1.85:
+        if depth == 0 or duration > 1.75:
             return self.evaluate_board(board, player, opponent)
-            
 
+        
         if maximizing:
             moves = get_valid_moves(board, player)
             if not moves:
@@ -159,27 +152,14 @@ class FourthAgent(Agent):
         if not valid_moves:
             return None
     
-        # Update board fill percentage
-        self.boardfill = self.updatefill(chess_board, player)
-    
-        # Decide search depth based on the game phase
-        if self.boardfill < 0.25:
-            depth = 3  # Early game
-        elif self.boardfill < 0.75:
-            depth = 3  # Mid game
-        else:
-            depth = 3  # Late game
-    
-    
+        depth = 3
+        
         best_move = None
         best_score = -float('inf')
         alpha = -float('inf')
         beta = float('inf')
     
         for move in valid_moves:
-            time_taken = time.time() - start_time
-            if time_taken > 1.85:
-                depth = 1
             board_copy = deepcopy(chess_board)
             execute_move(board_copy, move, player)
             score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent, start_time)
