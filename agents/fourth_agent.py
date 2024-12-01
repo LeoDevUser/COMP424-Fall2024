@@ -115,9 +115,9 @@ class FourthAgent(Agent):
 
         duration = time.time() - start_time
         board_size = len(board[0])
-        if board_size > 9 and duration > 1.8:
+        if board_size > 9 and duration > 1.75:
             return self.evaluate_board(board, player, opponent)
-        elif duration > 1.9:
+        elif duration > 1.85:
             return self.evaluate_board(board, player, opponent)
             
 
@@ -178,7 +178,7 @@ class FourthAgent(Agent):
     
         for move in valid_moves:
             time_taken = time.time() - start_time
-            if time_taken > 1.9:
+            if time_taken > 1.85:
                 depth = 1
             board_copy = deepcopy(chess_board)
             execute_move(board_copy, move, player)
