@@ -20,11 +20,13 @@ class StudentAgent(Agent):
 
     def itDepth(self):
         elapsed = time.time() - self.start
-        if elapsed < 0.1:
+        if elapsed < 0.5:
+            return 5
+        elif elapsed < 1:
             return 4
-        elif elapsed < 0.3:
+        if elapsed < 1.5:
             return 3
-        elif elapsed < 0.6:
+        elif elapsed < 1.8:
             return 2
         else:
             return 1
@@ -103,9 +105,9 @@ class StudentAgent(Agent):
         if is_endgame:
             # Assign a large positive or negative score based on the game result
             if p0_score > p1_score:
-                return 1000000 if player == 1 else -1000000
+                return 1000 if player == 1 else -1000
             elif p0_score < p1_score:
-                return -1000000 if player == 1 else 1000000
+                return -1000 if player == 1 else 1000
             else:
                 return 0  # Draw
 
@@ -137,7 +139,7 @@ class StudentAgent(Agent):
         for move in moves:
             board_copy = deepcopy(board)
             execute_move(board_copy, move, opponent)
-            score = self.minimax(board_copy, depth - 1, alpha, beta, True, player, opponent)
+            score = self.minimax(board_copy, min(depth - 1, self.itDepth() -1), alpha, beta, True, player, opponent)
             min_eval = min(min_eval, score)
             beta = min(beta, score)
             if beta <= alpha:
@@ -164,7 +166,7 @@ class StudentAgent(Agent):
                 break
             board_copy = deepcopy(chess_board)
             execute_move(board_copy, move, player)
-            score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
+            score = self.minimax(board_copy, min(depth - 1, self.itDepth() - 1), alpha, beta, False, player, opponent)
             if score > best_score:
                 best_score = score
                 best_move = move
