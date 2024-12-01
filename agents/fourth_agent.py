@@ -109,9 +109,17 @@ class FourthAgent(Agent):
             else:
                 return 0  # Draw
 
-        duration = time.time() - start_time
-        if depth == 0 or duration > 1.85:
+        
+        if depth == 0:
             return self.evaluate_board(board, player, opponent)
+
+        duration = time.time() - start_time
+        board_size = len(board[0])
+        if board_size > 9 and duration > 1.8:
+            return self.evaluate_board(board, player, opponent)
+        elif duration > 1.9:
+            return self.evaluate_board(board, player, opponent)
+            
 
         if maximizing:
             moves = get_valid_moves(board, player)
