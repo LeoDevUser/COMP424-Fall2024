@@ -54,51 +54,51 @@ class ThirdAgent(Agent):
         self.corners.append((size,size))
         
     def evaluate_board(self, board, player, opp):
-    # Initialize score
-    score = 0
-
-    # Ensure avoid, prefer, and corners are initialized
-    if not self.avoid:
-        self.initavoid(board)
-    if not self.prefer:
-        self.initprefer(board)
-    if not self.corners:
-        self.initcorners(board)
-
-    # Weights for different positions
-    WEIGHT_CORNER = 25
-    WEIGHT_PREFER = 5
-    WEIGHT_AVOID = -5
-
-    # Iterate over the board to calculate positional score
-    for i in range(len(board)):
-        for j in range(len(board)):
-            pos = (i, j)
-            if board[i][j] == player:
-                if pos in self.corners:
-                    score += WEIGHT_CORNER
-                elif pos in self.prefer:
-                    score += WEIGHT_PREFER
-                elif pos in self.avoid:
-                    score += WEIGHT_AVOID
-                else:
-                    score += 1  # Neutral position
-            elif board[i][j] == opp:
-                if pos in self.corners:
-                    score -= WEIGHT_CORNER
-                elif pos in self.prefer:
-                    score -= WEIGHT_PREFER
-                elif pos in self.avoid:
-                    score -= WEIGHT_AVOID
-                else:
-                    score -= 1  # Neutral position
-
-    # Mobility: Difference in number of valid moves
-    player_moves = len(get_valid_moves(board, player))
-    opp_moves = len(get_valid_moves(board, opp))
-    score += (player_moves - opp_moves) * 2  # Mobility weight
-
-    return score
+        # Initialize score
+        score = 0
+    
+        # Ensure avoid, prefer, and corners are initialized
+        if not self.avoid:
+            self.initavoid(board)
+        if not self.prefer:
+            self.initprefer(board)
+        if not self.corners:
+            self.initcorners(board)
+    
+        # Weights for different positions
+        WEIGHT_CORNER = 25
+        WEIGHT_PREFER = 5
+        WEIGHT_AVOID = -5
+    
+        # Iterate over the board to calculate positional score
+        for i in range(len(board)):
+            for j in range(len(board)):
+                pos = (i, j)
+                if board[i][j] == player:
+                    if pos in self.corners:
+                        score += WEIGHT_CORNER
+                    elif pos in self.prefer:
+                        score += WEIGHT_PREFER
+                    elif pos in self.avoid:
+                        score += WEIGHT_AVOID
+                    else:
+                        score += 1  # Neutral position
+                elif board[i][j] == opp:
+                    if pos in self.corners:
+                        score -= WEIGHT_CORNER
+                    elif pos in self.prefer:
+                        score -= WEIGHT_PREFER
+                    elif pos in self.avoid:
+                        score -= WEIGHT_AVOID
+                    else:
+                        score -= 1  # Neutral position
+    
+        # Mobility: Difference in number of valid moves
+        player_moves = len(get_valid_moves(board, player))
+        opp_moves = len(get_valid_moves(board, opp))
+        score += (player_moves - opp_moves) * 2  # Mobility weight
+    
+        return score
 
 
 
