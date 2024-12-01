@@ -154,49 +154,49 @@ class ThirdAgent(Agent):
     
             
     def step(self, chess_board, player, opponent):
-    start_time = time.time()
-    valid_moves = get_valid_moves(chess_board, player)
-    if not valid_moves:
-        return None
-
-    # Update board fill percentage
-    self.boardfill = self.updatefill(chess_board, player)
-
-    # Decide search depth based on the game phase
-    if self.boardfill < 0.25:
-        depth = 3  # Early game
-    elif self.boardfill < 0.75:
-        depth = 4  # Mid game
-    else:
-        depth = 5  # Late game
-
-    best_move = None
-    best_score = -float('inf')
-    alpha = -float('inf')
-    beta = float('inf')
-
-    # Optional: Use promising_moves to prioritize moves (not mandatory)
-    # valid_moves = self.promising_moves(valid_moves, chess_board, player, opponent, n=5)
-
-    for move in valid_moves:
-        board_copy = deepcopy(chess_board)
-        execute_move(board_copy, move, player)
-        score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
-        if score > best_score:
-            best_score = score
-            best_move = move
-        alpha = max(alpha, best_score)
-        if beta <= alpha:
-            break  # Alpha-beta pruning
-
-        # Check time to avoid exceeding time limit
+        start_time = time.time()
+        valid_moves = get_valid_moves(chess_board, player)
+        if not valid_moves:
+            return None
+    
+        # Update board fill percentage
+        self.boardfill = self.updatefill(chess_board, player)
+    
+        # Decide search depth based on the game phase
+        if self.boardfill < 0.25:
+            depth = 3  # Early game
+        elif self.boardfill < 0.75:
+            depth = 4  # Mid game
+        else:
+            depth = 5  # Late game
+    
+        best_move = None
+        best_score = -float('inf')
+        alpha = -float('inf')
+        beta = float('inf')
+    
+        # Optional: Use promising_moves to prioritize moves (not mandatory)
+        # valid_moves = self.promising_moves(valid_moves, chess_board, player, opponent, n=5)
+    
+        for move in valid_moves:
+            board_copy = deepcopy(chess_board)
+            execute_move(board_copy, move, player)
+            score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
+            if score > best_score:
+                best_score = score
+                best_move = move
+            alpha = max(alpha, best_score)
+            if beta <= alpha:
+                break  # Alpha-beta pruning
+    
+            # Check time to avoid exceeding time limit
+            time_taken = time.time() - start_time
+            if time_taken > 1.9:
+                break
+    
         time_taken = time.time() - start_time
-        if time_taken > 1.9:
-            break
-
-    time_taken = time.time() - start_time
-    print("My AI's turn took ", time_taken, "seconds.")
-    return best_move
+        print("My AI's turn took ", time_taken, "seconds.")
+        return best_move
 
 
 def find_top_n(nums, n):
