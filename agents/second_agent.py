@@ -70,25 +70,33 @@ class SecondAgent(Agent):
             opp_score = len(get_valid_moves(simb, 3 - player))
             if move in self.avoid:
                 if key == find_low_n:
-                    p1 += 6 - opp_score
-                    p2 += 6 - opp_score
+                    p1 += 6
+                    p2 += 6
                 else:
-                    p1 -= 6 + opp_score
-                    p2 -= 6 + opp_score
+                    p1 -= 6
+                    p2 -= 6
             if move in self.corners:
                 if key == find_low_n:
-                    p1 -= 12 + opp_score
-                    p2 -= 12 + opp_score
+                    p1 -= 12
+                    p2 -= 12
                 else:
-                    p1 += 12 - opp_score
-                    p2 += 12 - opp_score
+                    p1 += 12
+                    p2 += 12
             if move in self.prefer:
                 if key == find_low_n:
-                    p1 -= 6 + opp_score
-                    p2 -= 6 + opp_score
+                    p1 -= 6
+                    p2 -= 6
                 else:
-                    p1 += 6 - opp_score
-                    p2 += 6 - opp_score
+                    p1 += 6
+                    p2 += 6
+
+            #adjust to minimize opp avail moves
+            if key == find_low_n:
+                p1 += opp_score
+                p2 += opp_score
+            else:
+                p2 -= opp_score
+                p2 -= opp_score
 
             if player == 1:
                 scores.append((move,p1))
