@@ -6,4 +6,5 @@ from .alpha2_agent import Alpha2Agent
 from .second_agent import SecondAgent
 from .third_agent import ThirdAgent
 from .fourth_agent import FourthAgent
+from .fifth_agent import FifthAgent
 from .gpt_greedy_corners_agent import StudentAgent
