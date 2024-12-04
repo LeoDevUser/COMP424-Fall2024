@@ -19,9 +19,9 @@ class FifthAgent(Agent):
         self.start = 0
 
     def itDepth(self, move_qty):
-        if move_qty < 10:
+        if move_qty < 6:
             return 5
-        elif move_qty < 15:
+        elif move_qty < :
             return 4
         if move_qty < 25:
             return 3
