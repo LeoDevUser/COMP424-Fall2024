@@ -149,7 +149,8 @@ class FifthAgent(Agent):
         self.start = time.time()
         valid_moves = get_valid_moves(chess_board, player)
         moves_count = len(valid_moves)
-        print("Available moves: " + moves_count)
+        print("Available moves: ")
+        print(moves_count)
         if not valid_moves:
             return None
     
