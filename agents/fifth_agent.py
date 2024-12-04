@@ -132,6 +132,7 @@ class FifthAgent(Agent):
     
         else:
             moves = get_valid_moves(board, opponent)
+            move_count = len(moves)
             if not moves:
                 # Pass the turn back to the player
                 return self.minimax(board, min(depth - 1, self.itDepth(move_count) - 1), alpha, beta, True, player, opponent)
