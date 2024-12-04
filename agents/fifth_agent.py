@@ -20,7 +20,7 @@ class FifthAgent(Agent):
 
     def itDepth(self, move_qty):
         elapsed = time.time() - self.start
-        if elapsed > 1.7:
+        if elapsed > 1.8:
             return 1
         elif move_qty < 10:
             return 5
