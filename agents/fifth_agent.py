@@ -18,15 +18,14 @@ class FifthAgent(Agent):
         self.prefer = [] #tells us which squares to prioritize
         self.start = 0
 
-    def itDepth(self):
-        elapsed = time.time() - self.start
-        if elapsed < 0.4:
+    def itDepth(self, move_qty):
+        if move_qty < 10:
             return 5
-        elif elapsed < 0.8:
+        elif move_qty < 15:
             return 4
-        if elapsed < 1.2:
+        if move_qty < 25:
             return 3
-        elif elapsed < 1.6:
+        elif move_qty < 40:
             return 2
         else:
             return 1
@@ -149,6 +148,8 @@ class FifthAgent(Agent):
     def step(self, chess_board, player, opponent):
         self.start = time.time()
         valid_moves = get_valid_moves(chess_board, player)
+        moves_count = len(valid_moves)
+        print("Available moves: " + moves_count)
         if not valid_moves:
             return None
     
