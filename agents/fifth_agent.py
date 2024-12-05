@@ -18,17 +18,15 @@ class FifthAgent(Agent):
         self.prefer = [] #tells us which squares to prioritize
         self.start = 0
 
-    def itDepth(self, move_qty):
+    def itDepth(self):
         elapsed = time.time() - self.start
-        if elapsed > 1.92:
-            return 1
-        elif move_qty < 10:
+        if elapsed < 0.4:
             return 5
-        elif move_qty < 14:
+        elif elapsed < 0.8:
             return 4
-        elif move_qty < 18:
+        elif elapsed < 1.2:
             return 3
-        elif move_qty < 24:
+        elif elapsed < 1.6:
             return 2
         else:
             return 1
@@ -118,15 +116,14 @@ class FifthAgent(Agent):
 
         if maximizing:
             moves = get_valid_moves(board, player)
-            move_count = len(moves)
             if not moves:
             # Pass the turn to the opponent
-                return self.minimax(board, min(depth - 1, self.itDepth(move_count) - 1), alpha, beta, False, player, opponent)
+                return self.minimax(board, min(depth - 1, self.itDepth() - 1), alpha, beta, False, player, opponent)
             max_eval = -float('inf')
             for move in moves:
                 board_copy = deepcopy(board)
                 execute_move(board_copy, move, player)
-                score = self.minimax(board_copy, min(depth - 1, self.itDepth(move_count) - 1), alpha, beta, False, player, opponent)
+                score = self.minimax(board_copy, min(depth - 1, self.itDepth() - 1), alpha, beta, False, player, opponent)
                 max_eval = max(max_eval, score)
                 alpha = max(alpha, score)
                 if beta <= alpha:
@@ -135,31 +132,27 @@ class FifthAgent(Agent):
     
         else:
             moves = get_valid_moves(board, opponent)
-            move_count = len(moves)
             if not moves:
                 # Pass the turn back to the player
-                return self.minimax(board, min(depth - 1, self.itDepth(move_count) - 1), alpha, beta, True, player, opponent)
-            min_eval = float('inf')
-            for move in moves:
-                board_copy = deepcopy(board)
-                execute_move(board_copy, move, opponent)
-                score = self.minimax(board_copy, min(depth - 1, self.itDepth(move_count) -1), alpha, beta, True, player, opponent)
-                min_eval = min(min_eval, score)
-                beta = min(beta, score)
-                if beta <= alpha:
-                    break  # Alpha cut-off
-            return min_eval
+                return self.minimax(board, min(depth - 1, self.itDepth() - 1), alpha, beta, True, player, opponent)
+        min_eval = float('inf')
+        for move in moves:
+            board_copy = deepcopy(board)
+            execute_move(board_copy, move, opponent)
+            score = self.minimax(board_copy, min(depth - 1, self.itDepth() -1), alpha, beta, True, player, opponent)
+            min_eval = min(min_eval, score)
+            beta = min(beta, score)
+            if beta <= alpha:
+                break  # Alpha cut-off
+        return min_eval
             
     def step(self, chess_board, player, opponent):
         self.start = time.time()
         valid_moves = get_valid_moves(chess_board, player)
-        moves_count = len(valid_moves)
-        #print("Available moves: ")
-        #print(moves_count)
         if not valid_moves:
             return None
     
-        depth = self.itDepth(moves_count)
+        depth = self.itDepth()
     
         best_move = None
         best_score = -float('inf')
@@ -173,7 +166,7 @@ class FifthAgent(Agent):
                 break
             board_copy = deepcopy(chess_board)
             execute_move(board_copy, move, player)
-            score = self.minimax(board_copy, depth - 1, alpha, beta, False, player, opponent)
+            score = self.minimax(board_copy, min(depth - 1, self.itDepth() - 1), alpha, beta, False, player, opponent)
             if score > best_score:
                 best_score = score
                 best_move = move
