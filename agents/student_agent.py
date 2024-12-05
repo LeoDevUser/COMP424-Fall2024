@@ -11,7 +11,7 @@ class StudentAgent(Agent):
 
     def __init__(self):
         super(StudentAgent, self).__init__()
-        self.name = "FifthAgent"
+        self.name = "StudentAgent"
         self.avoid = [] #tells us which squares to avoid
         self.corners = [] #corners
         self.prefer = [] #tells us which squares to prioritize
