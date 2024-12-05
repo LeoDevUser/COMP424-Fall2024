@@ -5,7 +5,6 @@ import numpy as np
 from copy import deepcopy
 import time
 from helpers import random_move, count_capture, execute_move, check_endgame, get_valid_moves
-import heapq
 
 @register_agent("student_agent")
 class StudentAgent(Agent):
